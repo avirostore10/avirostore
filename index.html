@@ -561,6 +561,7 @@
             transition: 0.3s;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             position: relative;
+            cursor: pointer;
         }
 
         .product-card:hover {
@@ -595,6 +596,7 @@
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
+            z-index: 5;
         }
 
         .product-card .product-info {
@@ -1338,6 +1340,234 @@
             color: #dc3545;
         }
 
+        /* ===== صفحة تفاصيل المنتج ===== */
+        .product-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .product-details-images {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .product-details-main-image {
+            width: 100%;
+            height: 400px;
+            background: #f8f8f8;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: zoom-in;
+            border: 1px solid #eee;
+        }
+
+        .product-details-main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .product-details-main-image.zoomed img {
+            transform: scale(2);
+            cursor: zoom-out;
+        }
+
+        .product-details-thumbnails {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 5px 0;
+        }
+
+        .product-details-thumbnails img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+
+        .product-details-thumbnails img.active {
+            border-color: #ff9900;
+        }
+
+        .product-details-thumbnails img:hover {
+            border-color: #ff9900;
+        }
+
+        .product-details-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .product-details-info h1 {
+            font-size: 26px;
+            color: #111;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .product-details-info .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .product-details-info .rating-row .stars {
+            color: #ff9900;
+            font-size: 20px;
+        }
+
+        .product-details-info .rating-row .reviews {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .product-details-info .price-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .product-details-info .price-row .current {
+            font-size: 32px;
+            font-weight: 800;
+            color: #111;
+        }
+
+        .product-details-info .price-row .old {
+            font-size: 20px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .product-details-info .price-row .discount {
+            font-size: 16px;
+            color: #2e7d32;
+            font-weight: 700;
+            background: rgba(46, 125, 50, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .product-details-info .free-shipping-badge {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 15px;
+            background: rgba(46, 125, 50, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .product-details-info .description {
+            color: #444;
+            line-height: 1.8;
+            font-size: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .product-details-info .description p {
+            margin-top: 5px;
+        }
+
+        .product-details-info .specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .product-details-info .specs span {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .product-details-info .specs span strong {
+            color: #111;
+        }
+
+        .product-details-info .size-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 5px 0;
+        }
+
+        .product-details-info .size-selector .size-btn {
+            padding: 8px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .product-details-info .size-selector .size-btn:hover {
+            border-color: #ff9900;
+        }
+
+        .product-details-info .size-selector .size-btn.selected {
+            background: #ff9900;
+            color: #fff;
+            border-color: #ff9900;
+        }
+
+        .product-details-info .add-to-cart-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ff9900, #e68a00);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .product-details-info .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 153, 0, 0.3);
+        }
+
+        .product-details-info .back-btn {
+            padding: 12px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .product-details-info .back-btn:hover {
+            background: #e0e0e0;
+        }
+
         /* ===== الفوتر ===== */
         footer {
             background: #131921;
@@ -1409,6 +1639,14 @@
             .section-title {
                 padding: 0 20px;
                 font-size: 24px;
+            }
+
+            .product-details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-details-main-image {
+                height: 300px;
             }
         }
 
@@ -1587,6 +1825,27 @@
                 min-height: 150px !important;
                 font-size: 12px !important;
             }
+
+            .product-details-main-image {
+                height: 280px;
+            }
+
+            .product-details-info h1 {
+                font-size: 20px;
+            }
+
+            .product-details-info .price-row .current {
+                font-size: 26px;
+            }
+
+            .product-details-info .specs {
+                grid-template-columns: 1fr;
+            }
+
+            .privacy-modal-content {
+                max-width: 95%;
+                margin: 10px;
+            }
         }
 
         @media(max-width: 480px) {
@@ -1762,16 +2021,16 @@
         <nav class="categories-bar" id="categoriesBar">
             <a href="#" class="active" data-category="all" onclick="filterProducts('all')">الكل</a>
             <a href="#" data-category="ترنجات" onclick="filterProducts('ترنجات')">👕 ترنجات </a>
-            <a href="#" data-category="اشرات " onclick="filterProducts('اشرات')"> 🩳 اشرات </a>
+            <a href="#" data-category="اشرات" onclick="filterProducts('اشرات')"> 🩳 اشرات </a>
             <a href="#" data-category="بنطلونات" onclick="filterProducts('بنطلونات')"> 👖 بنطلونات </a>
-            <a href="#" data-category="شربات " onclick="filterProducts('شربات')">🧦 شربات </a>
+            <a href="#" data-category="شربات" onclick="filterProducts('شربات')">🧦 شربات </a>
         </nav>
 
         <!-- الهيرو -->
         <section class="hero">
             <div class="hero-text">
                 <h1>أهلاً بك في <span>Aviro</span></h1>
-                <p> أفضل العروض والمنتجات بأفضل الأسعار</p>
+                <p>🛍️ أفضل العروض والمنتجات بأفضل الأسعار</p>
             </div>
         </section>
 
@@ -1831,6 +2090,21 @@
             </div>
         </div>
 
+        <!-- ===== صفحة تفاصيل المنتج (Product Details) ===== -->
+        <div id="productDetailsModal" class="privacy-modal">
+            <div class="privacy-modal-content" style="max-width: 950px; max-height: 95vh; overflow-y: auto;">
+                <div class="privacy-modal-header">
+                    <h2>📦 <span>تفاصيل</span> المنتج</h2>
+                    <button onclick="closeProductDetails()">✕</button>
+                </div>
+                <div class="privacy-modal-body" id="productDetailsBody">
+                    <div id="productDetailsContent" style="display: flex; flex-direction: column; gap: 20px;">
+                        <!-- المحتوى سيتم إنشاؤه ديناميكياً -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- مودال الدفع -->
         <div id="checkoutModal" class="privacy-modal">
             <div class="privacy-modal-content">
@@ -1848,9 +2122,12 @@
                                     <input type="text" name="fi-sender-lastName" placeholder="الاسم الأخير" required>
                                     <input type="text" name="fi-sender-phone" placeholder="رقم الهاتف" required>
                                     <input type="text" name="fi-sender-address" placeholder="العنوان" required>
-                                    <input type="email" name="fi-sender-email" placeholder="البريد الإلكتروني" required class="full-width">
-                                    <textarea name="fi-text-message" placeholder="رسالتك..." rows="8" class="full-width order-message-textarea" id="orderMessage" readonly></textarea>
-                                    <button type="submit" class="submit-btn" id="contactSubmitBtn">📧 تأكيد وإرسال الطلب</button>
+                                    <input type="email" name="fi-sender-email" placeholder="البريد الإلكتروني" required
+                                        class="full-width">
+                                    <textarea name="fi-text-message" placeholder="رسالتك..." rows="8"
+                                        class="full-width order-message-textarea" id="orderMessage" readonly></textarea>
+                                    <button type="submit" class="submit-btn" id="contactSubmitBtn">📧 تأكيد وإرسال
+                                        الطلب</button>
                                     <p id="contactStatus" class="status-msg"></p>
                                 </div>
                             </form>
@@ -1908,7 +2185,8 @@
                         📘 فيسبوك: <strong style="color: #ff9900;">Aviro Store</strong>
                     </p>
 
-                    <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                    <div
+                        style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
                         <p style="color: #888; font-size: 14px;">
                             © 2026 <strong style="color: #ff9900;">Aviro Store</strong> – شكراً لثقتكم بنا 🙏
                         </p>
@@ -2003,11 +2281,11 @@
         // 3. تهيئة Forminit
         // ============================================================
         const forminit = new Forminit();
-        const FORM_ID = 'fcrwehkfyjg'; // ✅ Form ID الخاص بك
+        const FORM_ID = 'fcrwehkfyjg';
         console.log('✅ Forminit initialized with FORM_ID:', FORM_ID);
 
         // ============================================================
-        // 4. بيانات المنتجات
+        // 4. بيانات المنتجات مع وصف ومواصفات
         // ============================================================
         const allProducts = [{
             id: 1,
@@ -2044,7 +2322,11 @@
                 "https://d.top4top.io/p_3834r6yll1.jpeg",
                 "https://a.top4top.io/p_38347el5e1.jpeg"
             ],
-            freeShipping: true
+            freeShipping: true,
+            description: "شورت رجالي صيفي مصنوع من قطن عالي الجودة، مريح ومناسب للاستخدام اليومي. يتميز بتصميم عصري وألوان متعددة تناسب جميع الأذواق. مثالي للصيف والأنشطة الرياضية والاسترخاء في المنزل.",
+            brand: "Aviro",
+            material: "قطن 100%",
+            warranty: "ضمان لمدة 30 يوم"
         }, {
             id: 2,
             name: "تيشيرت كلاسيك قطني 100% - جودة عالية",
@@ -2056,7 +2338,11 @@
             reviews: 256,
             sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
             image: "https://e.top4top.io/p_3832v2k2m1.jpg",
-            freeShipping: true
+            freeShipping: true,
+            description: "تيشيرت كلاسيكي مصنوع من القطن الخالص 100%، ناعم ومريح للبشرة. مثالي للارتداء اليومي، يتميز بجودة عالية وخياطة متقنة. متوفر بمجموعة واسعة من الألوان والمقاسات. مناسب لجميع الأعمار.",
+            brand: "Aviro",
+            material: "قطن 100%",
+            warranty: "ضمان لمدة 30 يوم"
         }, {
             id: 3,
             name: "بنطلون جينز كلاسيك - مقاس مثالي",
@@ -2068,7 +2354,11 @@
             reviews: 89,
             sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
             image: "https://j.top4top.io/p_3832lszls1.jpg",
-            freeShipping: false
+            freeShipping: false,
+            description: "بنطلون جينز كلاسيكي بقصة مريحة، مصنوع من قماش الدنيم عالي الجودة. مثالي للإطلالات الكاجوال والرسمية، يتميز بمتانة عالية وتفاصيل دقيقة. متوفر بعدة ألوان تناسب جميع الأذواق.",
+            brand: "Aviro",
+            material: "دنيم 98% + إيلاستين 2%",
+            warranty: "ضمان لمدة 30 يوم"
         }];
 
         // ============================================================
@@ -2081,6 +2371,8 @@
         let isDragging = false;
         let dragStartX = 0;
         let currentCategory = 'all';
+        let currentDetailProductId = null;
+        let detailSelectedSize = null;
 
         // ============================================================
         // دوال المصادقة (باستخدام firebase.auth())
@@ -2241,10 +2533,8 @@
             btn.disabled = true;
             btn.textContent = 'جاري التغيير... ⏳';
 
-            // 1. تسجيل الدخول أولاً
             auth.signInWithEmailAndPassword(email, oldPassword)
                 .then((userCredential) => {
-                    // 2. تحديث كلمة المرور
                     return userCredential.user.updatePassword(newPassword);
                 })
                 .then(() => {
@@ -2345,7 +2635,7 @@
             document.getElementById('aboutModal').classList.remove('open');
         }
 
-        document.getElementById('aboutModal')?.addEventListener('click', function(e) {
+        document.getElementById('aboutModal')?.addEventListener('click', function (e) {
             if (e.target === this) closeAboutModal();
         });
 
@@ -2361,10 +2651,11 @@
             locationInput.value = '⏳ جاري جلب الموقع...';
 
             navigator.geolocation.getCurrentPosition(
-                function(position) {
+                function (position) {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+                    fetch(
+                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
                         .then(response => response.json())
                         .then(data => {
                             locationInput.value = data.display_name || `${lat}, ${lng}`;
@@ -2375,15 +2666,14 @@
                             showNotification('✅ تم تحديد الموقع');
                         });
                 },
-                function(error) {
+                function (error) {
                     let errorMessage = '⚠️ فشل في جلب الموقع';
                     if (error.code === 1) errorMessage = '⚠️ المستخدم رفض مشاركة الموقع';
                     else if (error.code === 2) errorMessage = '⚠️ الموقع غير متوفر حالياً';
                     else if (error.code === 3) errorMessage = '⚠️ انتهت مهلة جلب الموقع';
                     locationInput.value = '';
                     alert(errorMessage + '\nيمكنك كتابة العنوان يدوياً.');
-                },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
         }
 
@@ -2465,8 +2755,6 @@
             }
             if (document.getElementById('cartSidebar')?.classList.contains('open')) toggleCart();
             document.getElementById('checkoutModal').classList.add('open');
-
-            // تحديث ملخص الطلب في مربع الرسالة
             setTimeout(updateOrderSummary, 200);
         }
 
@@ -2478,7 +2766,7 @@
         }
 
         // ============================================================
-        // إرسال الطلب (EmailJS + Forminit) - المعدل
+        // إرسال الطلب (EmailJS + Forminit)
         // ============================================================
         function sendOrderEmail(name, email, phone, location, total, productsList, totalItems) {
             const message = `
@@ -2521,17 +2809,14 @@
         }
 
         function sendOrder() {
-            // ===== جلب البيانات من حقول Forminit =====
             let firstName = document.querySelector('input[name="fi-sender-firstName"]').value.trim();
             let lastName = document.querySelector('input[name="fi-sender-lastName"]').value.trim();
             const phone = document.querySelector('input[name="fi-sender-phone"]').value.trim();
             const address = document.querySelector('input[name="fi-sender-address"]').value.trim();
             const email = document.querySelector('input[name="fi-sender-email"]').value.trim();
 
-            // جلب البيانات من حقول الموقع القديمة (للتوافق)
-            const locationInput = document.getElementById('clientLocation').value.trim();
+            const locationInput = document.getElementById('clientLocation')?.value.trim() || '';
 
-            // ===== تنظيف البيانات =====
             firstName = cleanName(firstName);
             lastName = cleanName(lastName);
 
@@ -2542,7 +2827,6 @@
             const finalAddress = address || locationInput || 'غير مدخل';
             const finalEmail = email || 'غير مدخل';
 
-            // ===== التحقق من البيانات =====
             if (!firstName || !lastName || !finalPhone || !finalAddress) {
                 alert("⚠️ برجاء إدخال جميع البيانات (الاسم، رقم الهاتف، العنوان)!");
                 return;
@@ -2553,7 +2837,6 @@
                 return;
             }
 
-            // ===== حساب تفاصيل الطلب =====
             let total = 0;
             let totalItems = 0;
             let productsList = '';
@@ -2572,7 +2855,6 @@
 
             showNotification('📧 جاري إرسال الطلب...');
 
-            // ===== إرسال عبر Forminit (JSON) =====
             const orderData = {
                 blocks: [{
                     type: 'sender',
@@ -2639,23 +2921,25 @@
                     console.log('✅ Forminit response:', result);
                     if (result.error) {
                         console.warn('⚠️ Forminit error:', result.error);
+                        showNotification('❌ فشل إرسال الطلب: ' + result.error.message, 'error');
+                        return;
                     }
+                    showNotification('✅ تم إرسال الطلب عبر Forminit بنجاح!', 'success');
                 })
                 .catch((error) => {
                     console.warn('⚠️ Forminit catch:', error);
+                    showNotification('⚠️ فشل الإرسال عبر Forminit', 'error');
                 });
 
-            // ===== إرسال عبر EmailJS =====
             sendOrderEmail(finalName, finalEmail, finalPhone, finalAddress, total, productsList, totalItems)
                 .then(() => {
                     showNotification('✅ تم إرسال الطلب بنجاح! سيتم التواصل معك قريباً.', 'success');
+                    cart = [];
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                    updateCartIconCount();
+                    renderCart();
                     setTimeout(() => {
-                        cart = [];
-                        localStorage.setItem("cart", JSON.stringify(cart));
-                        updateCartIconCount();
                         closeCheckoutModal();
-                        renderCart();
-                        // تفريغ حقول النموذج
                         document.querySelectorAll('#checkoutModal input, #checkoutModal textarea').forEach(el => {
                             el.value = '';
                         });
@@ -2718,27 +3002,13 @@
 
                     const stars = '⭐'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '⭐' : '');
 
-                    let sizeButtonsHTML = '';
-                    if (product.sizes && product.sizes.length > 0) {
-                        sizeButtonsHTML = `<div class="size-container" id="sizeContainer-${product.id}">`;
-                        product.sizes.forEach(size => {
-                            const selectedClass = (selectedSizes[product.id] === size) ? 'selected' : '';
-                            sizeButtonsHTML += `
-                                    <button class="size-btn ${selectedClass}" onclick="selectSize(${product.id}, '${size}')">
-                                        ${size}
-                                    </button>
-                                `;
-                        });
-                        sizeButtonsHTML += `</div>`;
-                    }
-
                     const discountPercent = product.discount ?
                         `<span class="discount-badge">${product.discount}</span>` : '';
                     const freeShipping = product.freeShipping ?
                         `<span class="free-shipping">🚚 توصيل مجاني</span>` : '';
 
                     container.innerHTML += `
-                            <div class="product-card">
+                            <div class="product-card" onclick="openProductDetails(${product.id})">
                                 ${imageHTML}
                                 ${discountPercent}
                                 <div class="product-info">
@@ -2752,9 +3022,8 @@
                                         ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}
                                         ${product.discount ? `<span class="discount-percent">${product.discount}</span>` : ''}
                                     </div>
-                                    ${sizeButtonsHTML}
                                     ${freeShipping}
-                                    <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                                    <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">
                                         🛒 إضافة إلى العربة
                                     </button>
                                 </div>
@@ -3015,6 +3284,161 @@
         }
 
         // ============================================================
+        // دوال صفحة تفاصيل المنتج (مثل نون وأمازون)
+        // ============================================================
+
+        function openProductDetails(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) {
+                showNotification('⚠️ المنتج غير موجود');
+                return;
+            }
+
+            currentDetailProductId = productId;
+            detailSelectedSize = null;
+
+            const modal = document.getElementById('productDetailsModal');
+            const content = document.getElementById('productDetailsContent');
+
+            const images = product.images360 || [product.image];
+
+            let sizesHTML = '';
+            if (product.sizes && product.sizes.length > 0) {
+                sizesHTML = `<div class="size-selector">`;
+                product.sizes.forEach(size => {
+                    sizesHTML += `
+                            <button class="size-btn" onclick="selectDetailSize('${size}')" data-size="${size}">
+                                ${size}
+                            </button>
+                        `;
+                });
+                sizesHTML += `</div>`;
+            }
+
+            const fullStars = Math.floor(product.rating);
+            const halfStar = product.rating % 1 >= 0.5 ? 1 : 0;
+            let starsHTML = '⭐'.repeat(fullStars) + (halfStar ? '⭐' : '');
+
+            const freeShippingHTML = product.freeShipping ?
+                `<span class="free-shipping-badge">🚚 توصيل مجاني</span>` : '';
+
+            // إنشاء الصور المصغرة
+            let thumbnailsHTML = images.map((img, i) => `
+                    <img src="${img}" alt="${product.name}" onclick="changeDetailImage(${i})" data-index="${i}" ${i === 0 ? 'class="active"' : ''}>
+                `).join('');
+
+            content.innerHTML = `
+                    <div class="product-details-grid">
+                        <!-- الصور -->
+                        <div class="product-details-images">
+                            <div class="product-details-main-image" id="detailMainImage" onclick="toggleZoom()">
+                                <img src="${images[0]}" alt="${product.name}" id="detailMainImg">
+                            </div>
+                            <div class="product-details-thumbnails" id="detailThumbnails">
+                                ${thumbnailsHTML}
+                            </div>
+                        </div>
+
+                        <!-- المعلومات -->
+                        <div class="product-details-info">
+                            <button class="back-btn" onclick="closeProductDetails()">← العودة إلى المتجر</button>
+                            <h1>${product.name}</h1>
+                            <div class="rating-row">
+                                <span class="stars">${starsHTML}</span>
+                                <span class="reviews">(${product.reviews || 0} تقييم)</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="current">${product.price} ج.م</span>
+                                ${product.oldPrice ? `<span class="old">${product.oldPrice} ج.م</span>` : ''}
+                                ${product.discount ? `<span class="discount">${product.discount} خصم</span>` : ''}
+                            </div>
+                            ${freeShippingHTML}
+                            <div class="description">
+                                <strong>📝 الوصف:</strong>
+                                <p>${product.description || 'لا يوجد وصف لهذا المنتج'}</p>
+                            </div>
+                            <div class="specs">
+                                <span><strong>🏷️ العلامة التجارية:</strong> ${product.brand || 'Aviro'}</span>
+                                <span><strong>🧵 المادة:</strong> ${product.material || 'غير محدد'}</span>
+                                <span><strong>✅ الضمان:</strong> ${product.warranty || 'غير محدد'}</span>
+                                <span><strong>📦 التوصيل:</strong> ${product.freeShipping ? 'مجاني' : 'يتم حسابه عند الشراء'}</span>
+                            </div>
+                            ${sizesHTML}
+                            <button class="add-to-cart-btn" onclick="addToCartFromDetails()">🛒 إضافة إلى العربة</button>
+                        </div>
+                    </div>
+                `;
+
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProductDetails() {
+            document.getElementById('productDetailsModal').classList.remove('open');
+            document.body.style.overflow = '';
+            currentDetailProductId = null;
+            detailSelectedSize = null;
+        }
+
+        function changeDetailImage(index) {
+            const product = allProducts.find(p => p.id === currentDetailProductId);
+            if (!product) return;
+
+            const images = product.images360 || [product.image];
+            const mainImg = document.getElementById('detailMainImg');
+            if (!mainImg) return;
+
+            mainImg.src = images[index];
+
+            document.querySelectorAll('#detailThumbnails img').forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
+
+            document.getElementById('detailMainImage')?.classList.remove('zoomed');
+        }
+
+        function toggleZoom() {
+            const el = document.getElementById('detailMainImage');
+            if (el) el.classList.toggle('zoomed');
+        }
+
+        function selectDetailSize(size) {
+            detailSelectedSize = size;
+            document.querySelectorAll('.product-details-info .size-selector .size-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.size === size);
+            });
+        }
+
+        function addToCartFromDetails() {
+            const product = allProducts.find(p => p.id === currentDetailProductId);
+            if (!product) return;
+
+            if (product.sizes && product.sizes.length > 0 && !detailSelectedSize) {
+                showNotification('⚠️ يرجى اختيار المقاس أولاً');
+                return;
+            }
+
+            const selectedSize = detailSelectedSize || 'غير محدد';
+            const existingIndex = cart.findIndex(item => item.id === product.id && item.selectedSize === selectedSize);
+
+            if (existingIndex !== -1) {
+                cart[existingIndex].quantity++;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1,
+                    selectedSize: selectedSize
+                });
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartIconCount();
+            renderCart();
+            showNotification(`✅ تم إضافة "${product.name}" إلى العربة!`, 'success');
+            closeProductDetails();
+        }
+
+        // ============================================================
         // Forminit - نموذج التواصل في المودال
         // ============================================================
         const contactForm = document.getElementById('contactForm');
@@ -3022,10 +3446,9 @@
         const contactSubmitBtn = document.getElementById('contactSubmitBtn');
 
         if (contactForm && contactStatus && contactSubmitBtn) {
-            contactForm.addEventListener('submit', async function(event) {
+            contactForm.addEventListener('submit', async function (event) {
                 event.preventDefault();
 
-                // عرض حالة التحميل
                 contactStatus.textContent = '⏳ جاري الإرسال...';
                 contactStatus.className = 'status-msg';
                 contactSubmitBtn.disabled = true;
@@ -3034,7 +3457,6 @@
                 const formData = new FormData(contactForm);
                 const { data, error } = await forminit.submit(FORM_ID, formData);
 
-                // إعادة الزر لحالته الطبيعية
                 contactSubmitBtn.disabled = false;
                 contactSubmitBtn.textContent = '📧 تأكيد وإرسال الطلب';
 
@@ -3045,13 +3467,11 @@
                     return;
                 }
 
-                // نجاح الإرسال
                 contactStatus.textContent = '✅ تم إرسال رسالتك بنجاح!';
                 contactStatus.className = 'status-msg success';
                 contactForm.reset();
                 showNotification('✅ تم إرسال رسالتك بنجاح!', 'success');
 
-                // إخفاء رسالة النجاح بعد 5 ثواني
                 setTimeout(() => {
                     contactStatus.textContent = '';
                     contactStatus.className = 'status-msg';
@@ -3060,11 +3480,21 @@
         }
 
         // ربط الأحداث عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('scroll', () => {
                 const btn = document.getElementById('backToTop');
                 if (window.scrollY > 400) btn.classList.add('show');
                 else btn.classList.remove('show');
+            });
+
+            // إغلاق مودال التفاصيل عند النقر خارج المحتوى
+            document.getElementById('productDetailsModal')?.addEventListener('click', function (e) {
+                if (e.target === this) closeProductDetails();
+            });
+
+            // إغلاق مودال الدفع عند النقر خارج المحتوى
+            document.getElementById('checkoutModal')?.addEventListener('click', function (e) {
+                if (e.target === this) closeCheckoutModal();
             });
         });
     </script>

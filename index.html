@@ -1568,6 +1568,112 @@
             background: #e0e0e0;
         }
 
+        /* ===== منتجات مشابهة في صفحة التفاصيل ===== */
+        .similar-products-section {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 25px;
+        }
+
+        .similar-products-section h3 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 15px;
+        }
+
+        .similar-products-section h3 span {
+            color: #ff9900;
+        }
+
+        .similar-products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .similar-product-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .similar-product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .similar-product-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            background: #f8f8f8;
+        }
+
+        .similar-product-card .similar-product-info {
+            padding: 12px 14px 14px;
+        }
+
+        .similar-product-card .similar-product-info h4 {
+            font-size: 14px;
+            color: #111;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 38px;
+            margin-bottom: 4px;
+        }
+
+        .similar-product-card .similar-product-info .price {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111;
+        }
+
+        .similar-product-card .similar-product-info .old-price {
+            font-size: 14px;
+            color: #999;
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+
+        .similar-product-card .similar-add-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ff9900, #e68a00);
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+            margin-top: 6px;
+        }
+
+        .similar-product-card .similar-add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+        }
+
+        .similar-product-card .similar-discount-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #d32f2f;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
         /* ===== الفوتر ===== */
         footer {
             background: #131921;
@@ -1647,6 +1753,10 @@
 
             .product-details-main-image {
                 height: 300px;
+            }
+
+            .similar-products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             }
         }
 
@@ -1846,6 +1956,14 @@
                 max-width: 95%;
                 margin: 10px;
             }
+
+            .similar-products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .similar-product-card img {
+                height: 130px;
+            }
         }
 
         @media(max-width: 480px) {
@@ -1885,6 +2003,23 @@
                 font-size: 10px;
                 padding: 3px 8px;
                 min-width: 30px;
+            }
+
+            .similar-products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .similar-product-card img {
+                height: 110px;
+            }
+
+            .similar-product-card .similar-product-info h4 {
+                font-size: 12px;
+                height: 32px;
+            }
+
+            .similar-product-card .similar-product-info .price {
+                font-size: 15px;
             }
         }
 
@@ -2285,65 +2420,527 @@
         console.log('✅ Forminit initialized with FORM_ID:', FORM_ID);
 
         // ============================================================
-        // 4. بيانات المنتجات مع وصف ومواصفات
+        // 4. بيانات المنتجات - 30 منتج مع صور صحيحة
         // ============================================================
-        const allProducts = [{
-            id: 1,
-            name: "شورت رجالي صيفي مريح - متعدد الألوان",
-            price: 1,
-            oldPrice: 16,
-            discount: "27%",
-            category: "اشرات",
-            rating: 4.5,
-            reviews: 128,
-            sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-            images360: [
-                "https://d.top4top.io/p_3834obtdm1.jpeg",
-                "https://h.top4top.io/p_383483fep1.jpeg",
-                "https://f.top4top.io/p_3834sfu151.jpeg",
-                "https://j.top4top.io/p_3834e1c1t1.jpeg",
-                "https://j.top4top.io/p_383477vuj1.jpeg",
-                "https://b.top4top.io/p_3834jid641.jpeg",
-                "https://e.top4top.io/p_38346f8we1.jpeg"
-            ],
-            freeShipping: true,
-            description: "شورت رجالي صيفي مصنوع من قطن عالي الجودة، مريح ومناسب للاستخدام اليومي. يتميز بتصميم عصري وألوان متعددة تناسب جميع الأذواق. مثالي للصيف والأنشطة الرياضية والاسترخاء في المنزل.",
-            brand: "Aviro",
-            material: "قطن 100%",
-            warranty: "ضمان لمدة 30 يوم"
-        }, {
-            id: 2,
-            name: "تيشيرت كلاسيك قطني 100% - جودة عالية",
-            price: 756,
-            oldPrice: 1050,
-            discount: "28%",
-            category: "ترنجات",
-            rating: 4.8,
-            reviews: 256,
-            sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-            image: "https://e.top4top.io/p_3832v2k2m1.jpg",
-            freeShipping: true,
-            description: "تيشيرت كلاسيكي مصنوع من القطن الخالص 100%، ناعم ومريح للبشرة. مثالي للارتداء اليومي، يتميز بجودة عالية وخياطة متقنة. متوفر بمجموعة واسعة من الألوان والمقاسات. مناسب لجميع الأعمار.",
-            brand: "Aviro",
-            material: "قطن 100%",
-            warranty: "ضمان لمدة 30 يوم"
-        }, {
-            id: 3,
-            name: "بنطلون جينز كلاسيك - مقاس مثالي",
-            price: 756,
-            oldPrice: 1050,
-            discount: "28%",
-            category: "بنطلونات",
-            rating: 4.3,
-            reviews: 89,
-            sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-            image: "https://j.top4top.io/p_3832lszls1.jpg",
-            freeShipping: false,
-            description: "بنطلون جينز كلاسيكي بقصة مريحة، مصنوع من قماش الدنيم عالي الجودة. مثالي للإطلالات الكاجوال والرسمية، يتميز بمتانة عالية وتفاصيل دقيقة. متوفر بعدة ألوان تناسب جميع الأذواق.",
-            brand: "Aviro",
-            material: "دنيم 98% + إيلاستين 2%",
-            warranty: "ضمان لمدة 30 يوم"
-        }];
+        const allProducts = [
+            // ===== ترنجات (تيشيرتات) - 10 منتجات =====
+            {
+                id: 1,
+                name: "تيشيرت قطني كلاسيك - أبيض",
+                price: 350,
+                oldPrice: 500,
+                discount: "30%",
+                category: "ترنجات",
+                rating: 4.8,
+                reviews: 156,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://e.top4top.io/p_3832v2k2m1.jpg",
+                freeShipping: true,
+                description: "تيشيرت قطني أبيض كلاسيكي، ناعم ومريح للبشرة. مثالي للارتداء اليومي مع جودة عالية وخياطة متقنة.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 2,
+                name: "تيشيرت رياضي - أسود",
+                price: 420,
+                oldPrice: 600,
+                discount: "30%",
+                category: "ترنجات",
+                rating: 4.6,
+                reviews: 98,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+                image: "https://i.top4top.io/p_3834hq65u1.jpeg",
+                freeShipping: true,
+                description: "تيشيرت رياضي أسود مصنوع من قطن ممتاز، مناسب للجيم والأنشطة الرياضية اليومية.",
+                brand: "Aviro Sport",
+                material: "قطن 95% + إيلاستين 5%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 3,
+                name: "تيشيرت كاجوال - أزرق داكن",
+                price: 380,
+                oldPrice: 550,
+                discount: "31%",
+                category: "ترنجات",
+                rating: 4.7,
+                reviews: 134,
+                sizes: ["S", "M", "L", "XL", "2XL"],
+                image: "https://d.top4top.io/p_3834obtdm1.jpeg",
+                freeShipping: true,
+                description: "تيشيرت كاجوال أزرق داكن بتصميم عصري، مناسب للارتداء اليومي مع جودة فائقة.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 4,
+                name: "تيشيرت بياقة - رمادي فاتح",
+                price: 450,
+                oldPrice: 650,
+                discount: "31%",
+                category: "ترنجات",
+                rating: 4.5,
+                reviews: 87,
+                sizes: ["M", "L", "XL", "2XL", "3XL"],
+                image: "https://h.top4top.io/p_383483fep1.jpeg",
+                freeShipping: false,
+                description: "تيشيرت بياقة رمادي فاتح، أنيق ومناسب للمناسبات الكاجوال وشبه الرسمية.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 5,
+                name: "تيشيرت صيفي - أخضر فاتح",
+                price: 320,
+                oldPrice: 480,
+                discount: "33%",
+                category: "ترنجات",
+                rating: 4.9,
+                reviews: 210,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://f.top4top.io/p_3834sfu151.jpeg",
+                freeShipping: true,
+                description: "تيشيرت صيفي أخضر فاتح، خفيف ومنعش، مثالي لأيام الصيف الحارة.",
+                brand: "Aviro Summer",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 6,
+                name: "تيشيرت مطبع - أحمر",
+                price: 400,
+                oldPrice: 580,
+                discount: "31%",
+                category: "ترنجات",
+                rating: 4.4,
+                reviews: 76,
+                sizes: ["S", "M", "L", "XL", "2XL"],
+                image: "https://j.top4top.io/p_3834e1c1t1.jpeg",
+                freeShipping: false,
+                description: "تيشيرت مطبع أحمر بتصميم مميز، يضفي لمسة عصرية على إطلالتك.",
+                brand: "Aviro Print",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 7,
+                name: "تيشيرت - بيج فاتح",
+                price: 360,
+                oldPrice: 520,
+                discount: "31%",
+                category: "ترنجات",
+                rating: 4.6,
+                reviews: 112,
+                sizes: ["M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://j.top4top.io/p_383477vuj1.jpeg",
+                freeShipping: true,
+                description: "تيشيرت بيج فاتح بلون محايد وجذاب، يناسب جميع الأوقات والمناسبات.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 8,
+                name: "تيشيرت - أزرق سماوي",
+                price: 390,
+                oldPrice: 560,
+                discount: "30%",
+                category: "ترنجات",
+                rating: 4.7,
+                reviews: 145,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+                image: "https://b.top4top.io/p_3834jid641.jpeg",
+                freeShipping: true,
+                description: "تيشيرت أزرق سماوي مريح وجذاب، يمنحك إطلالة منعشة ومميزة.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 9,
+                name: "تيشيرت أنيق - أسود مع طباعة",
+                price: 430,
+                oldPrice: 620,
+                discount: "31%",
+                category: "ترنجات",
+                rating: 4.8,
+                reviews: 189,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://e.top4top.io/p_38346f8we1.jpeg",
+                freeShipping: true,
+                description: "تيشيرت أسود مع طباعة أنيقة، يجمع بين الأناقة والعصرية في تصميم واحد.",
+                brand: "Aviro Design",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 10,
+                name: "تيشيرت - وردي فاتح",
+                price: 340,
+                oldPrice: 490,
+                discount: "31%",
+                category: "ترنجات",
+                rating: 4.5,
+                reviews: 94,
+                sizes: ["M", "L", "XL", "2XL"],
+                image: "https://k.top4top.io/p_3834ndvyg1.jpeg",
+                freeShipping: false,
+                description: "تيشيرت وردي فاتح رقيق وأنيق، مثالي للإطلالات النهارية الصيفية.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+
+            // ===== اشرات (شورتات) - 10 منتجات =====
+            {
+                id: 11,
+                name: "شورت رياضي - أسود",
+                price: 420,
+                oldPrice: 600,
+                discount: "30%",
+                category: "اشرات",
+                rating: 4.6,
+                reviews: 87,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+                image: "https://d.top4top.io/p_3834obtdm1.jpeg",
+                freeShipping: true,
+                description: "شورت رياضي أسود مريح، مثالي للجيم والأنشطة الرياضية اليومية.",
+                brand: "Aviro Sport",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 12,
+                name: "شورت صيفي - أزرق فاتح",
+                price: 380,
+                oldPrice: 550,
+                discount: "31%",
+                category: "اشرات",
+                rating: 4.8,
+                reviews: 156,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://h.top4top.io/p_383483fep1.jpeg",
+                freeShipping: true,
+                description: "شورت صيفي أزرق فاتح، خفيف ومنعش، مناسب لأيام الصيف الحارة.",
+                brand: "Aviro Summer",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 13,
+                name: "شورت كاجوال - بيج",
+                price: 450,
+                oldPrice: 650,
+                discount: "31%",
+                category: "اشرات",
+                rating: 4.4,
+                reviews: 67,
+                sizes: ["M", "L", "XL", "2XL", "3XL"],
+                image: "https://f.top4top.io/p_3834sfu151.jpeg",
+                freeShipping: false,
+                description: "شورت كاجوال بيج، أنيق ومناسب للخروج والتنزه.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 14,
+                name: "شورت - رمادي غامق",
+                price: 400,
+                oldPrice: 580,
+                discount: "31%",
+                category: "اشرات",
+                rating: 4.7,
+                reviews: 123,
+                sizes: ["S", "M", "L", "XL", "2XL"],
+                image: "https://j.top4top.io/p_3834e1c1t1.jpeg",
+                freeShipping: true,
+                description: "شورت رمادي غامق بتصميم عصري، يناسب جميع الإطلالات الكاجوال.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 15,
+                name: "شورت - أخضر زيتي",
+                price: 430,
+                oldPrice: 620,
+                discount: "31%",
+                category: "اشرات",
+                rating: 4.5,
+                reviews: 89,
+                sizes: ["M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://j.top4top.io/p_383477vuj1.jpeg",
+                freeShipping: false,
+                description: "شورت أخضر زيتي لون مميز وجذاب، يضفي لمسة أنيقة على إطلالتك.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 16,
+                name: "شورت - أحمر",
+                price: 370,
+                oldPrice: 530,
+                discount: "30%",
+                category: "اشرات",
+                rating: 4.3,
+                reviews: 56,
+                sizes: ["S", "M", "L", "XL", "2XL"],
+                image: "https://b.top4top.io/p_3834jid641.jpeg",
+                freeShipping: true,
+                description: "شورت أحمر جريء ومميز، مناسب لمن يحبون الألوان الجريئة.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 17,
+                name: "شورت - كحلي",
+                price: 390,
+                oldPrice: 560,
+                discount: "30%",
+                category: "اشرات",
+                rating: 4.9,
+                reviews: 210,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://e.top4top.io/p_38346f8we1.jpeg",
+                freeShipping: true,
+                description: "شورت كحلي أنيق وعصري، مثالي للارتداء اليومي في فصل الصيف.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 18,
+                name: "شورت - أبيض",
+                price: 360,
+                oldPrice: 520,
+                discount: "31%",
+                category: "اشرات",
+                rating: 4.6,
+                reviews: 134,
+                sizes: ["M", "L", "XL", "2XL", "3XL"],
+                image: "https://k.top4top.io/p_3834ndvyg1.jpeg",
+                freeShipping: true,
+                description: "شورت أبيض ناصع، كلاسيكي وأنيق، يناسب جميع المناسبات.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 19,
+                name: "شورت - بني",
+                price: 410,
+                oldPrice: 590,
+                discount: "31%",
+                category: "اشرات",
+                rating: 4.4,
+                reviews: 78,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+                image: "https://e.top4top.io/p_3834kr83j1.jpeg",
+                freeShipping: false,
+                description: "شورت بني بلون ترابي أنيق، يناسب الإطلالات الكاجوال والعملية.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 20,
+                name: "شورت - تيفاني",
+                price: 440,
+                oldPrice: 640,
+                discount: "31%",
+                category: "اشرات",
+                rating: 4.8,
+                reviews: 167,
+                sizes: ["M", "L", "XL", "2XL", "4XL"],
+                image: "https://e.top4top.io/p_38340mfo81.jpeg",
+                freeShipping: true,
+                description: "شورت تيفاني بلون مميز وجذاب، يمنحك إطلالة صيفية منعشة.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+
+            // ===== بنطلونات - 5 منتجات =====
+            {
+                id: 21,
+                name: "بنطلون جينز كلاسيك - أزرق غامق",
+                price: 850,
+                oldPrice: 1200,
+                discount: "29%",
+                category: "بنطلونات",
+                rating: 4.7,
+                reviews: 145,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+                image: "https://j.top4top.io/p_3832lszls1.jpg",
+                freeShipping: false,
+                description: "بنطلون جينز كلاسيكي بقصة مريحة، متانة عالية وتفاصيل دقيقة.",
+                brand: "Aviro Denim",
+                material: "دنيم 98% + إيلاستين 2%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 22,
+                name: "بنطلون كاجوال - رمادي",
+                price: 750,
+                oldPrice: 1050,
+                discount: "29%",
+                category: "بنطلونات",
+                rating: 4.5,
+                reviews: 98,
+                sizes: ["M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://i.top4top.io/p_3834hq65u1.jpeg",
+                freeShipping: false,
+                description: "بنطلون كاجوال رمادي، مريح وأنيق، مناسب للاستخدام اليومي.",
+                brand: "Aviro",
+                material: "قطن 95% + بوليستر 5%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 23,
+                name: "بنطلون جينز - أسود",
+                price: 900,
+                oldPrice: 1300,
+                discount: "31%",
+                category: "بنطلونات",
+                rating: 4.8,
+                reviews: 189,
+                sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+                image: "https://l.top4top.io/p_38340dzlv1.jpeg",
+                freeShipping: true,
+                description: "بنطلون جينز أسود أنيق، مثالي للإطلالات الكاجوال والرسمية.",
+                brand: "Aviro Denim",
+                material: "دنيم 98% + إيلاستين 2%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 24,
+                name: "بنطلون جينز - أزرق فاتح",
+                price: 800,
+                oldPrice: 1150,
+                discount: "30%",
+                category: "بنطلونات",
+                rating: 4.6,
+                reviews: 134,
+                sizes: ["M", "L", "XL", "2XL", "3XL", "4XL"],
+                image: "https://h.top4top.io/p_3834nnerg1.jpeg",
+                freeShipping: false,
+                description: "بنطلون جينز أزرق فاتح، كلاسيكي وعصري في آن واحد.",
+                brand: "Aviro Denim",
+                material: "دنيم 100%",
+                warranty: "ضمان 30 يوم"
+            },
+            {
+                id: 25,
+                name: "بنطلون - بيج",
+                price: 780,
+                oldPrice: 1100,
+                discount: "29%",
+                category: "بنطلونات",
+                rating: 4.4,
+                reviews: 76,
+                sizes: ["S", "M", "L", "XL", "2XL"],
+                image: "https://b.top4top.io/p_3834a5x881.jpeg",
+                freeShipping: false,
+                description: "بنطلون بيج أنيق ومناسب للخروجات والمناسبات الكاجوال.",
+                brand: "Aviro",
+                material: "قطن 100%",
+                warranty: "ضمان 30 يوم"
+            },
+
+            // ===== شربات (جوارب) - 5 منتجات =====
+            {
+                id: 26,
+                name: "شربة قطن - أبيض (5 قطع)",
+                price: 350,
+                oldPrice: 500,
+                discount: "30%",
+                category: "شربات",
+                rating: 4.9,
+                reviews: 210,
+                sizes: ["متوسط"],
+                image: "https://h.top4top.io/p_3834c5hbu1.jpeg",
+                freeShipping: true,
+                description: "جوارب قطنية بيضاء فاخرة، ناعمة ومريحة، مجموعة من 5 قطع.",
+                brand: "Aviro Socks",
+                material: "قطن 80% + بوليستر 20%",
+                warranty: "ضمان 15 يوم"
+            },
+            {
+                id: 27,
+                name: "شربة قطن - أسود (5 قطع)",
+                price: 350,
+                oldPrice: 500,
+                discount: "30%",
+                category: "شربات",
+                rating: 4.8,
+                reviews: 189,
+                sizes: ["متوسط"],
+                image: "https://k.top4top.io/p_3834suuuv1.jpeg",
+                freeShipping: true,
+                description: "جوارب قطنية سوداء عالية الجودة، مناسبة للاستخدام اليومي.",
+                brand: "Aviro Socks",
+                material: "قطن 80% + بوليستر 20%",
+                warranty: "ضمان 15 يوم"
+            },
+            {
+                id: 28,
+                name: "شربة رياضية - رمادي (3 قطع)",
+                price: 420,
+                oldPrice: 600,
+                discount: "30%",
+                category: "شربات",
+                rating: 4.7,
+                reviews: 156,
+                sizes: ["صغير", "متوسط", "كبير"],
+                image: "https://d.top4top.io/p_3834hox601.jpeg",
+                freeShipping: false,
+                description: "جوارب رياضية رمادية، مريحة ومناسبة للجيم والأنشطة الرياضية.",
+                brand: "Aviro Sport",
+                material: "قطن 70% + بوليستر 30%",
+                warranty: "ضمان 15 يوم"
+            },
+            {
+                id: 29,
+                name: "شربة - أزرق (3 قطع)",
+                price: 400,
+                oldPrice: 580,
+                discount: "31%",
+                category: "شربات",
+                rating: 4.6,
+                reviews: 112,
+                sizes: ["متوسط", "كبير"],
+                image: "https://g.top4top.io/p_3834lt0rz1.jpeg",
+                freeShipping: false,
+                description: "جوارب زرقاء أنيقة، تضيف لمسة من اللون لإطلالتك.",
+                brand: "Aviro Socks",
+                material: "قطن 80% + بوليستر 20%",
+                warranty: "ضمان 15 يوم"
+            },
+            {
+                id: 30,
+                name: "شربة - بيج (3 قطع)",
+                price: 380,
+                oldPrice: 550,
+                discount: "31%",
+                category: "شربات",
+                rating: 4.5,
+                reviews: 98,
+                sizes: ["متوسط", "كبير"],
+                image: "https://a.top4top.io/p_3834mbihe1.jpeg",
+                freeShipping: true,
+                description: "جوارب بيج فاتحة، لون محايد يناسب جميع الأحذية.",
+                brand: "Aviro Socks",
+                material: "قطن 80% + بوليستر 20%",
+                warranty: "ضمان 15 يوم"
+            }
+        ];
 
         // ============================================================
         // 5. المتغيرات العامة
@@ -2619,7 +3216,7 @@
             document.getElementById('aboutModal').classList.remove('open');
         }
 
-        document.getElementById('aboutModal')?.addEventListener('click', function (e) {
+        document.getElementById('aboutModal')?.addEventListener('click', function(e) {
             if (e.target === this) closeAboutModal();
         });
 
@@ -2635,11 +3232,11 @@
             locationInput.value = '⏳ جاري جلب الموقع...';
 
             navigator.geolocation.getCurrentPosition(
-                function (position) {
+                function(position) {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     fetch(
-                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
+                            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
                         .then(response => response.json())
                         .then(data => {
                             locationInput.value = data.display_name || `${lat}, ${lng}`;
@@ -2650,7 +3247,7 @@
                             showNotification('✅ تم تحديد الموقع');
                         });
                 },
-                function (error) {
+                function(error) {
                     let errorMessage = '⚠️ فشل في جلب الموقع';
                     if (error.code === 1) errorMessage = '⚠️ المستخدم رفض مشاركة الموقع';
                     else if (error.code === 2) errorMessage = '⚠️ الموقع غير متوفر حالياً';
@@ -2716,7 +3313,8 @@
                 total += itemTotal;
                 totalItems += item.quantity;
                 message += `${index + 1}. ${item.name}\n`;
-                message += `   Size: ${item.selectedSize || 'Not specified'} | Qty: ${item.quantity} | Price: ${itemTotal} EGP\n\n`;
+                message +=
+                `   Size: ${item.selectedSize || 'Not specified'} | Qty: ${item.quantity} | Price: ${itemTotal} EGP\n\n`;
             });
 
             message += '━'.repeat(35) + '\n';
@@ -2754,27 +3352,27 @@
         // ============================================================
         function sendOrderEmail(name, email, phone, location, total, productsList, totalItems) {
             const message = `
-    🛍️ طلب جديد من متجر Aviro Store!
+        🛍️ طلب جديد من متجر Aviro Store!
 
-    👤 اسم العميل: ${name}
-    📱 رقم الهاتف: ${phone}
-    📍 العنوان: ${location}
-    ✉️ البريد الإلكتروني: ${email}
+        👤 اسم العميل: ${name}
+        📱 رقم الهاتف: ${phone}
+        📍 العنوان: ${location}
+        ✉️ البريد الإلكتروني: ${email}
 
-    📦 تفاصيل المنتجات:
-    ${productsList}
+        📦 تفاصيل المنتجات:
+        ${productsList}
 
-    📊 ملخص الطلب:
-    • عدد القطع: ${totalItems} قطعة
-    • الإجمالي: ${total} ج.م
+        📊 ملخص الطلب:
+        • عدد القطع: ${totalItems} قطعة
+        • الإجمالي: ${total} ج.م
 
-    📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}
-    🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}
+        📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}
+        🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}
 
-    ---
-    📧 تم الإرسال تلقائياً من متجر Aviro Store
-    🌐 avirostore10@gmail.com
-    `;
+        ---
+        📧 تم الإرسال تلقائياً من متجر Aviro Store
+        🌐 avirostore10@gmail.com
+        `;
 
             const templateParams = {
                 to_email: STORE_EMAIL,
@@ -2829,7 +3427,8 @@
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 totalItems += item.quantity;
-                productsList += `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
+                productsList +=
+                    `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
             });
 
             if (cart.length === 0) {
@@ -2853,20 +3452,20 @@
                     name: 'order_details',
                     value: `🛍️ طلب جديد من متجر Aviro Store!
 
-        👤 اسم العميل: ${finalName}
-        📱 رقم الهاتف: ${finalPhone}
-        📍 العنوان: ${finalAddress}
-        ✉️ البريد الإلكتروني: ${finalEmail}
+            👤 اسم العميل: ${finalName}
+            📱 رقم الهاتف: ${finalPhone}
+            📍 العنوان: ${finalAddress}
+            ✉️ البريد الإلكتروني: ${finalEmail}
 
-        📦 تفاصيل الطلب:
-        ${productsList}
+            📦 تفاصيل الطلب:
+            ${productsList}
 
-        📊 ملخص الطلب:
-        • عدد القطع: ${totalItems} قطعة
-        • الإجمالي: ${total} ج.م
+            📊 ملخص الطلب:
+            • عدد القطع: ${totalItems} قطعة
+            • الإجمالي: ${total} ج.م
 
-        📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}
-        🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}`
+            📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}
+            🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}`
                 }, {
                     type: 'text',
                     name: 'customer_name',
@@ -2951,12 +3550,12 @@
 
                 if (!productsToDisplay || productsToDisplay.length === 0) {
                     container.innerHTML = `
-                            <div style="grid-column:1/-1; text-align:center; padding:80px 20px; color:#888;">
-                                <span style="font-size:60px; display:block; margin-bottom:20px;">🔍</span>
-                                <h2 style="font-size:28px; margin-bottom:10px; color:#111;">لا توجد منتجات</h2>
-                                <p>حاول تغيير كلمة البحث أو التصنيف</p>
-                            </div>
-                        `;
+                                <div style="grid-column:1/-1; text-align:center; padding:80px 20px; color:#888;">
+                                    <span style="font-size:60px; display:block; margin-bottom:20px;">🔍</span>
+                                    <h2 style="font-size:28px; margin-bottom:10px; color:#111;">لا توجد منتجات</h2>
+                                    <p>حاول تغيير كلمة البحث أو التصنيف</p>
+                                </div>
+                            `;
                     return;
                 }
 
@@ -2965,19 +3564,19 @@
                     let imageHTML = '';
                     if (is360) {
                         imageHTML = `
-                                <div class="image-360-container" 
-                                     id="container-${product.id}"
-                                     onmousedown="startDrag(event, ${product.id})"
-                                     onmousemove="dragRotate(event, ${product.id})"
-                                     onmouseup="endDrag()"
-                                     onmouseleave="endDrag()"
-                                     ontouchstart="startDragTouch(event, ${product.id})"
-                                     ontouchmove="dragRotateTouch(event, ${product.id})"
-                                     ontouchend="endDrag()">
-                                    <img id="img-${product.id}" src="${product.images360[0]}" alt="${product.name}">
-                                    <span class="badge-360">🔄 360°</span>
-                                </div>
-                            `;
+                                    <div class="image-360-container" 
+                                         id="container-${product.id}"
+                                         onmousedown="startDrag(event, ${product.id})"
+                                         onmousemove="dragRotate(event, ${product.id})"
+                                         onmouseup="endDrag()"
+                                         onmouseleave="endDrag()"
+                                         ontouchstart="startDragTouch(event, ${product.id})"
+                                         ontouchmove="dragRotateTouch(event, ${product.id})"
+                                         ontouchend="endDrag()">
+                                        <img id="img-${product.id}" src="${product.images360[0]}" alt="${product.name}">
+                                        <span class="badge-360">🔄 360°</span>
+                                    </div>
+                                `;
                         currentImageIndex[product.id] = 0;
                     } else {
                         imageHTML =
@@ -2992,27 +3591,27 @@
                         `<span class="free-shipping">🚚 توصيل مجاني</span>` : '';
 
                     container.innerHTML += `
-                            <div class="product-card" onclick="openProductDetails(${product.id})">
-                                ${imageHTML}
-                                ${discountPercent}
-                                <div class="product-info">
-                                    <h3>${product.name}</h3>
-                                    <div class="rating">
-                                        <span class="stars">${stars}</span>
-                                        <span class="count">(${product.reviews || 0})</span>
+                                <div class="product-card" onclick="openProductDetails(${product.id})">
+                                    ${imageHTML}
+                                    ${discountPercent}
+                                    <div class="product-info">
+                                        <h3>${product.name}</h3>
+                                        <div class="rating">
+                                            <span class="stars">${stars}</span>
+                                            <span class="count">(${product.reviews || 0})</span>
+                                        </div>
+                                        <div class="price-container">
+                                            <span class="current-price">${product.price} ج.م</span>
+                                            ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}
+                                            ${product.discount ? `<span class="discount-percent">${product.discount}</span>` : ''}
+                                        </div>
+                                        ${freeShipping}
+                                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">
+                                            🛒 إضافة إلى العربة
+                                        </button>
                                     </div>
-                                    <div class="price-container">
-                                        <span class="current-price">${product.price} ج.م</span>
-                                        ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}
-                                        ${product.discount ? `<span class="discount-percent">${product.discount}</span>` : ''}
-                                    </div>
-                                    ${freeShipping}
-                                    <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">
-                                        🛒 إضافة إلى العربة
-                                    </button>
                                 </div>
-                            </div>
-                        `;
+                            `;
                 });
 
                 productsToDisplay.forEach(product => {
@@ -3203,21 +3802,21 @@
                 total += item.price * item.quantity;
                 const imgSrc = item.images360 ? item.images360[0] : item.image;
                 cartItems.innerHTML += `
-                        <div class="cart-item">
-                            <img src="${imgSrc}" alt="${item.name}">
-                            <div class="cart-item-info">
-                                <h4>${item.name}</h4>
-                                <p class="cart-item-price">${item.price} ج.م</p>
-                                <p class="cart-item-size">المقاس: ${item.selectedSize || 'غير محدد'}</p>
-                                <div class="qty-box">
-                                    <button onclick="changeQuantity(${item.id}, -1, '${item.selectedSize}')">−</button>
-                                    <span>${item.quantity}</span>
-                                    <button onclick="changeQuantity(${item.id}, 1, '${item.selectedSize}')">+</button>
+                            <div class="cart-item">
+                                <img src="${imgSrc}" alt="${item.name}">
+                                <div class="cart-item-info">
+                                    <h4>${item.name}</h4>
+                                    <p class="cart-item-price">${item.price} ج.م</p>
+                                    <p class="cart-item-size">المقاس: ${item.selectedSize || 'غير محدد'}</p>
+                                    <div class="qty-box">
+                                        <button onclick="changeQuantity(${item.id}, -1, '${item.selectedSize}')">−</button>
+                                        <span>${item.quantity}</span>
+                                        <button onclick="changeQuantity(${item.id}, 1, '${item.selectedSize}')">+</button>
+                                    </div>
                                 </div>
+                                <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.selectedSize}')">🗑️</button>
                             </div>
-                            <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.selectedSize}')">🗑️</button>
-                        </div>
-                    `;
+                        `;
             });
             if (cartTotal) cartTotal.innerText = total;
         }
@@ -3268,7 +3867,7 @@
         }
 
         // ============================================================
-        // دوال صفحة تفاصيل المنتج (مثل نون وأمازون)
+        // دوال صفحة تفاصيل المنتج (مع 10 منتجات مشابهة عشوائية)
         // ============================================================
 
         function openProductDetails(productId) {
@@ -3291,10 +3890,10 @@
                 sizesHTML = `<div class="size-selector">`;
                 product.sizes.forEach(size => {
                     sizesHTML += `
-                            <button class="size-btn" onclick="selectDetailSize('${size}')" data-size="${size}">
-                                ${size}
-                            </button>
-                        `;
+                                <button class="size-btn" onclick="selectDetailSize('${size}')" data-size="${size}">
+                                    ${size}
+                                </button>
+                            `;
                 });
                 sizesHTML += `</div>`;
             }
@@ -3308,50 +3907,85 @@
 
             // إنشاء الصور المصغرة
             let thumbnailsHTML = images.map((img, i) => `
-                    <img src="${img}" alt="${product.name}" onclick="changeDetailImage(${i})" data-index="${i}" ${i === 0 ? 'class="active"' : ''}>
-                `).join('');
+                        <img src="${img}" alt="${product.name}" onclick="changeDetailImage(${i})" data-index="${i}" ${i === 0 ? 'class="active"' : ''}>
+                    `).join('');
+
+            // ===== الحصول على 10 منتجات مشابهة عشوائية من نفس التصنيف =====
+            const similarProducts = allProducts
+                .filter(p => p.id !== product.id && p.category === product.category)
+                .sort(() => Math.random() - 0.5) // 🔀 ترتيب عشوائي
+                .slice(0, 10); // نأخذ أول 10 منتجات فقط
+
+            let similarProductsHTML = '';
+            if (similarProducts.length > 0) {
+                similarProductsHTML = `
+                            <div class="similar-products-section">
+                                <h3>🛍️ <span>منتجات مشابهة</span> (${similarProducts.length})</h3>
+                                <div class="similar-products-grid">
+                                    ${similarProducts.map(p => {
+                                        const imgSrc = p.images360 ? p.images360[0] : p.image;
+                                        return `
+                                            <div class="similar-product-card" onclick="openProductDetails(${p.id})">
+                                                ${p.discount ? `<span class="similar-discount-badge">${p.discount}</span>` : ''}
+                                                <img src="${imgSrc}" alt="${p.name}" loading="lazy">
+                                                <div class="similar-product-info">
+                                                    <h4>${p.name}</h4>
+                                                    <div>
+                                                        <span class="price">${p.price} ج.م</span>
+                                                        ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
+                                                    </div>
+                                                    <button class="similar-add-btn" onclick="event.stopPropagation(); addToCart(${p.id})">🛒 أضف للعربة</button>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+            }
 
             content.innerHTML = `
-                    <div class="product-details-grid">
-                        <!-- الصور -->
-                        <div class="product-details-images">
-                            <div class="product-details-main-image" id="detailMainImage" onclick="toggleZoom()">
-                                <img src="${images[0]}" alt="${product.name}" id="detailMainImg">
+                        <div class="product-details-grid">
+                            <!-- الصور -->
+                            <div class="product-details-images">
+                                <div class="product-details-main-image" id="detailMainImage" onclick="toggleZoom()">
+                                    <img src="${images[0]}" alt="${product.name}" id="detailMainImg">
+                                </div>
+                                <div class="product-details-thumbnails" id="detailThumbnails">
+                                    ${thumbnailsHTML}
+                                </div>
                             </div>
-                            <div class="product-details-thumbnails" id="detailThumbnails">
-                                ${thumbnailsHTML}
-                            </div>
-                        </div>
 
-                        <!-- المعلومات -->
-                        <div class="product-details-info">
-                            <button class="back-btn" onclick="closeProductDetails()">← العودة إلى المتجر</button>
-                            <h1>${product.name}</h1>
-                            <div class="rating-row">
-                                <span class="stars">${starsHTML}</span>
-                                <span class="reviews">(${product.reviews || 0} تقييم)</span>
+                            <!-- المعلومات -->
+                            <div class="product-details-info">
+                                <button class="back-btn" onclick="closeProductDetails()">← العودة إلى المتجر</button>
+                                <h1>${product.name}</h1>
+                                <div class="rating-row">
+                                    <span class="stars">${starsHTML}</span>
+                                    <span class="reviews">(${product.reviews || 0} تقييم)</span>
+                                </div>
+                                <div class="price-row">
+                                    <span class="current">${product.price} ج.م</span>
+                                    ${product.oldPrice ? `<span class="old">${product.oldPrice} ج.م</span>` : ''}
+                                    ${product.discount ? `<span class="discount">${product.discount} خصم</span>` : ''}
+                                </div>
+                                ${freeShippingHTML}
+                                <div class="description">
+                                    <strong>📝 الوصف:</strong>
+                                    <p>${product.description || 'لا يوجد وصف لهذا المنتج'}</p>
+                                </div>
+                                <div class="specs">
+                                    <span><strong>🏷️ العلامة التجارية:</strong> ${product.brand || 'Aviro'}</span>
+                                    <span><strong>🧵 المادة:</strong> ${product.material || 'غير محدد'}</span>
+                                    <span><strong>✅ الضمان:</strong> ${product.warranty || 'غير محدد'}</span>
+                                    <span><strong>📦 التوصيل:</strong> ${product.freeShipping ? 'مجاني' : 'يتم حسابه عند الشراء'}</span>
+                                </div>
+                                ${sizesHTML}
+                                <button class="add-to-cart-btn" onclick="addToCartFromDetails()">🛒 إضافة إلى العربة</button>
                             </div>
-                            <div class="price-row">
-                                <span class="current">${product.price} ج.م</span>
-                                ${product.oldPrice ? `<span class="old">${product.oldPrice} ج.م</span>` : ''}
-                                ${product.discount ? `<span class="discount">${product.discount} خصم</span>` : ''}
-                            </div>
-                            ${freeShippingHTML}
-                            <div class="description">
-                                <strong>📝 الوصف:</strong>
-                                <p>${product.description || 'لا يوجد وصف لهذا المنتج'}</p>
-                            </div>
-                            <div class="specs">
-                                <span><strong>🏷️ العلامة التجارية:</strong> ${product.brand || 'Aviro'}</span>
-                                <span><strong>🧵 المادة:</strong> ${product.material || 'غير محدد'}</span>
-                                <span><strong>✅ الضمان:</strong> ${product.warranty || 'غير محدد'}</span>
-                                <span><strong>📦 التوصيل:</strong> ${product.freeShipping ? 'مجاني' : 'يتم حسابه عند الشراء'}</span>
-                            </div>
-                            ${sizesHTML}
-                            <button class="add-to-cart-btn" onclick="addToCartFromDetails()">🛒 إضافة إلى العربة</button>
                         </div>
-                    </div>
-                `;
+                        ${similarProductsHTML}
+                    `;
 
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -3430,7 +4064,7 @@
         const contactSubmitBtn = document.getElementById('contactSubmitBtn');
 
         if (contactForm && contactStatus && contactSubmitBtn) {
-            contactForm.addEventListener('submit', async function (event) {
+            contactForm.addEventListener('submit', async function(event) {
                 event.preventDefault();
 
                 contactStatus.textContent = '⏳ جاري الإرسال...';
@@ -3464,7 +4098,7 @@
         }
 
         // ربط الأحداث عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('scroll', () => {
                 const btn = document.getElementById('backToTop');
                 if (window.scrollY > 400) btn.classList.add('show');
@@ -3472,12 +4106,12 @@
             });
 
             // إغلاق مودال التفاصيل عند النقر خارج المحتوى
-            document.getElementById('productDetailsModal')?.addEventListener('click', function (e) {
+            document.getElementById('productDetailsModal')?.addEventListener('click', function(e) {
                 if (e.target === this) closeProductDetails();
             });
 
             // إغلاق مودال الدفع عند النقر خارج المحتوى
-            document.getElementById('checkoutModal')?.addEventListener('click', function (e) {
+            document.getElementById('checkoutModal')?.addEventListener('click', function(e) {
                 if (e.target === this) closeCheckoutModal();
             });
         });

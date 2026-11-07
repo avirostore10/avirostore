@@ -610,6 +610,163 @@
             text-align: center; font-size: 14px;
         }
 
+        /* ===== خيارات الدفع ===== */
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .payment-option {
+            padding: 18px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            background: #f8f8f8;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+            user-select: none;
+        }
+        .payment-option:hover {
+            border-color: #ff9900;
+            background: #fff8f0;
+        }
+        .payment-option.selected {
+            border-color: #ff9900;
+            background: linear-gradient(135deg, #fff8e1, #ffe0b2);
+            box-shadow: 0 4px 15px rgba(255,153,0,0.25);
+        }
+        .payment-option .pay-icon {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .payment-option .pay-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        /* ===== قسم الدفع الإلكتروني ===== */
+        .online-payment-section {
+            display: none;
+            background: linear-gradient(135deg, #fff8e1, #fff3e0);
+            border: 2px solid #ff9900;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .online-payment-section.show {
+            display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+        .online-payment-section h4 {
+            font-size: 15px;
+            color: #111;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+        .instapay-number-box {
+            background: #fff;
+            border: 2px dashed #ff9900;
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .instapay-number-box .number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ff9900;
+            direction: ltr;
+            letter-spacing: 2px;
+        }
+        .copy-instapay-btn {
+            background: #ff9900;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+        .copy-instapay-btn:hover {
+            background: #e68a00;
+            transform: scale(1.05);
+        }
+        .instapay-hint {
+            color: #666;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        /* ===== رفع صورة الإيصال ===== */
+        .receipt-upload-section {
+            background: #fff;
+            border: 2px dashed #94a3b8;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 14px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .receipt-upload-section:hover {
+            border-color: #ff9900;
+            background: #fffbf5;
+        }
+        .receipt-upload-section.has-file {
+            border-color: #2e7d32;
+            background: rgba(46,125,50,0.05);
+        }
+        .receipt-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #555;
+            font-weight: 600;
+        }
+        .receipt-upload-label .upload-icon {
+            font-size: 32px;
+        }
+        .receipt-upload-label .upload-text {
+            font-size: 13px;
+        }
+        .receipt-upload-label .upload-subtext {
+            font-size: 11px;
+            color: #999;
+        }
+        .receipt-upload-section input[type="file"] {
+            display: none;
+        }
+        .receipt-preview {
+            margin-top: 10px;
+            display: none;
+        }
+        .receipt-preview.show {
+            display: block;
+        }
+        .receipt-preview img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            object-fit: contain;
+        }
+        .receipt-filename {
+            font-size: 12px;
+            color: #2e7d32;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
         /* ===== التجاوب ===== */
         @media(max-width: 992px) {
             #productsContainer {
@@ -663,6 +820,7 @@
             .product-details-info .price-row .current { font-size: 24px; }
             .product-details-info .specs { grid-template-columns: 1fr; }
             .privacy-modal-content { max-width: 96%; margin: 10px; }
+            .payment-options { grid-template-columns: 1fr; }
         }
 
         @media(max-width: 480px) {
@@ -938,9 +1096,9 @@
 
         <!-- مودال الدفع -->
         <div id="checkoutModal" class="privacy-modal">
-            <div class="privacy-modal-content">
+            <div class="privacy-modal-content" style="max-width: 560px;">
                 <div class="privacy-modal-header">
-                    <h2>📦 <span>بيانات</span> الشحن</h2>
+                    <h2>📦 <span>بيانات</span> الشحن والدفع</h2>
                     <button onclick="closeCheckoutModal()">✕</button>
                 </div>
                 <div class="privacy-modal-body">
@@ -948,6 +1106,55 @@
                         <div class="forminit-contact-section">
                             <form id="contactForm">
                                 <div class="form-grid">
+
+                                    <!-- ===== خيارات الدفع ===== -->
+                                    <div class="full-width" style="margin-bottom: 6px;">
+                                        <label style="display:block; font-weight:700; font-size:14px; color:#111; margin-bottom:10px;">
+                                            💳 اختر طريقة الدفع:
+                                        </label>
+                                        <div class="payment-options">
+                                            <div class="payment-option" id="payCashOption" onclick="selectPaymentMethod('cash')">
+                                                <span class="pay-icon">💵</span>
+                                                <span class="pay-label">الدفع عند الاستلام</span>
+                                            </div>
+                                            <div class="payment-option" id="payOnlineOption" onclick="selectPaymentMethod('online')">
+                                                <span class="pay-icon">💳</span>
+                                                <span class="pay-label">الدفع أونلاين (إنستاباي)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- ===== قسم الدفع الإلكتروني ===== -->
+                                    <div class="online-payment-section" id="onlinePaymentSection">
+                                        <h4>📱 قم بتحويل المبلغ إلى رقم إنستاباي:</h4>
+                                        <div class="instapay-number-box">
+                                            <span class="number">01108776432</span>
+                                            <button type="button" class="copy-instapay-btn" onclick="copyInstapayNumber()">
+                                                📋 نسخ
+                                            </button>
+                                        </div>
+                                        <p class="instapay-hint">⚠️ بعد التحويل، ارفع صورة إيصال التحويل أدناه</p>
+
+                                        <!-- رفع صورة الإيصال -->
+                                        <div class="receipt-upload-section" id="receiptUploadSection">
+                                            <label class="receipt-upload-label" for="receiptFile">
+                                                <span class="upload-icon">📸</span>
+                                                <span class="upload-text">اضغط لرفع صورة إيصال التحويل</span>
+                                                <span class="upload-subtext">(jpg, png, pdf)</span>
+                                            </label>
+                                            <input type="file" id="receiptFile" accept="image/*,application/pdf" onchange="handleReceiptUpload(event)">
+                                            <div class="receipt-preview" id="receiptPreview">
+                                                <img id="receiptPreviewImg" src="" alt="إيصال التحويل">
+                                                <p class="receipt-filename" id="receiptFilename"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- ===== بيانات الشحن ===== -->
+                                    <div class="full-width" style="margin-top: 6px; margin-bottom: 4px;">
+                                        <label style="font-weight:700; font-size:14px; color:#111;">📍 بيانات الشحن:</label>
+                                    </div>
+
                                     <input type="text" name="firstName" id="checkoutFirstName" placeholder="الاسم الأول" required>
                                     <input type="text" name="lastName" id="checkoutLastName" placeholder="الاسم الأخير" required>
                                     <input type="text" name="phone" id="checkoutPhone" placeholder="رقم الهاتف" required>
@@ -1147,6 +1354,11 @@
         let currentDetailProductId = null;
         let detailSelectedSize = null;
         let pendingCheckout = false;
+
+        // متغيرات الدفع
+        let selectedPaymentMethod = null; // 'cash' أو 'online'
+        let receiptFile = null; // ملف الإيصال
+        let receiptFileName = '';
 
         // ============================================================
         // 5. دوال المصادقة
@@ -1564,7 +1776,91 @@
         }
 
         // ============================================================
-        // 10. دوال مساعدة
+        // 10. دوال الدفع
+        // ============================================================
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+
+            const cashOption = document.getElementById('payCashOption');
+            const onlineOption = document.getElementById('payOnlineOption');
+            const onlineSection = document.getElementById('onlinePaymentSection');
+
+            cashOption.classList.toggle('selected', method === 'cash');
+            onlineOption.classList.toggle('selected', method === 'online');
+
+            if (method === 'online') {
+                onlineSection.classList.add('show');
+            } else {
+                onlineSection.classList.remove('show');
+            }
+        }
+
+        function copyInstapayNumber() {
+            const number = '01108776432';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(number)
+                    .then(() => showNotification('✅ تم نسخ الرقم: ' + number, 'success'))
+                    .catch(() => fallbackCopy(number));
+            } else {
+                fallbackCopy(number);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showNotification('✅ تم نسخ الرقم: ' + text, 'success');
+            } catch (err) {
+                showNotification('⚠️ فشل النسخ، الرقم: ' + text, 'error');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function handleReceiptUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // التحقق من الحجم (بحد أقصى 5 ميجا)
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('⚠️ حجم الصورة كبير جداً (الحد الأقصى 5 ميجا)', 'error');
+                event.target.value = '';
+                return;
+            }
+
+            receiptFile = file;
+            receiptFileName = file.name;
+
+            const preview = document.getElementById('receiptPreview');
+            const previewImg = document.getElementById('receiptPreviewImg');
+            const filename = document.getElementById('receiptFilename');
+            const uploadSection = document.getElementById('receiptUploadSection');
+
+            // عرض الصورة إذا كانت صورة
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // PDF - عرض اسم الملف فقط
+                preview.classList.remove('show');
+            }
+
+            filename.textContent = '✅ ' + file.name;
+            uploadSection.classList.add('has-file');
+            showNotification('✅ تم رفع صورة الإيصال', 'success');
+        }
+
+        // ============================================================
+        // 11. دوال مساعدة
         // ============================================================
         function cleanName(name) {
             let cleaned = name.replace(/[^a-zA-Z\u0600-\u06FF\s\-'\.]/g, '');
@@ -1610,6 +1906,7 @@
             message += `📊 Total Items: ${totalItems} piece(s)\n`;
             message += `💰 Total: ${total} EGP\n`;
             message += '\n' + '━'.repeat(35) + '\n';
+            message += `💳 Payment: ${selectedPaymentMethod === 'online' ? 'Online (InstaPay)' : 'Cash on Delivery'}\n`;
             message += `📅 Order Date: ${new Date().toLocaleDateString('en-EG')}\n`;
             message += `🕐 Order Time: ${new Date().toLocaleTimeString('en-EG')}`;
 
@@ -1617,7 +1914,7 @@
         }
 
         // ============================================================
-        // 11. إتمام الشراء — التحقق من تسجيل الدخول + البيانات
+        // 12. إتمام الشراء — التحقق من تسجيل الدخول + البيانات
         // ============================================================
         function checkout() {
             if (cart.length === 0) {
@@ -1648,6 +1945,19 @@
 
             // البيانات موجودة → افتح الدفع مع ملء تلقائي
             if (document.getElementById('cartSidebar')?.classList.contains('open')) toggleCart();
+
+            // إعادة تعيين اختيارات الدفع
+            selectedPaymentMethod = null;
+            receiptFile = null;
+            receiptFileName = '';
+            document.getElementById('payCashOption')?.classList.remove('selected');
+            document.getElementById('payOnlineOption')?.classList.remove('selected');
+            document.getElementById('onlinePaymentSection')?.classList.remove('show');
+            document.getElementById('receiptPreview')?.classList.remove('show');
+            document.getElementById('receiptUploadSection')?.classList.remove('has-file');
+            document.getElementById('receiptFile').value = '';
+            document.getElementById('receiptFilename').textContent = '';
+
             document.getElementById('checkoutModal').classList.add('open');
             setTimeout(() => {
                 updateOrderSummary();
@@ -1676,9 +1986,9 @@
         }
 
         // ============================================================
-        // 12. إرسال الطلب عبر Formcarry
+        // 13. إرسال الطلب عبر Formcarry
         // ============================================================
-        async function submitOrderWithFormcarry(name, phone, email, address, productsList, total, totalItems) {
+        async function submitOrderWithFormcarry(name, phone, email, address, productsList, total, totalItems, paymentMethod, receiptInfo) {
             try {
                 const formData = new FormData();
                 formData.append("customer_name", name);
@@ -1688,16 +1998,26 @@
                 formData.append("products_list", productsList);
                 formData.append("total_items", totalItems + " قطعة");
                 formData.append("total_price", total + " ج.م");
+                formData.append("payment_method", paymentMethod === 'online' ? 'الدفع أونلاين (إنستاباي)' : 'الدفع عند الاستلام');
                 formData.append("order_date", new Date().toLocaleDateString("ar-EG"));
                 formData.append("order_time", new Date().toLocaleTimeString("ar-EG"));
                 formData.append("store_name", "Aviro Store");
+
+                // إضافة صورة الإيصال إذا كانت موجودة
+                if (receiptInfo && receiptInfo.file) {
+                    formData.append("payment_receipt", receiptInfo.file);
+                    formData.append("receipt_filename", receiptInfo.fileName);
+                }
+
                 formData.append("message",
                     `🛍️ طلب جديد من Aviro Store\n\n` +
                     `👤 العميل: ${name}\n` +
                     `📱 الهاتف: ${phone}\n` +
                     `✉️ البريد: ${email}\n` +
                     `🏠 العنوان: ${address}\n\n` +
-                    `📦 المنتجات:\n${productsList}\n\n` +
+                    `💳 طريقة الدفع: ${paymentMethod === 'online' ? 'أونلاين (إنستاباي)' : 'عند الاستلام'}\n` +
+                    (receiptInfo && receiptInfo.file ? `📸 إيصال التحويل: مرفق\n` : '') +
+                    `\n📦 المنتجات:\n${productsList}\n\n` +
                     `📊 إجمالي القطع: ${totalItems}\n` +
                     `💰 الإجمالي: ${total} ج.م`
                 );
@@ -1724,9 +2044,21 @@
         }
 
         // ============================================================
-        // 13. sendOrder — إرسال الطلب
+        // 14. sendOrder — إرسال الطلب
         // ============================================================
         async function sendOrder() {
+            // التحقق من اختيار طريقة الدفع
+            if (!selectedPaymentMethod) {
+                alert("⚠️ يرجى اختيار طريقة الدفع أولاً (الدفع عند الاستلام أو أونلاين)");
+                return;
+            }
+
+            // التحقق من رفع الإيصال في حالة الدفع أونلاين
+            if (selectedPaymentMethod === 'online' && !receiptFile) {
+                alert("⚠️ يرجى رفع صورة إيصال التحويل أولاً");
+                return;
+            }
+
             let firstName = document.getElementById('checkoutFirstName').value.trim();
             let lastName = document.getElementById('checkoutLastName').value.trim();
             const phone = document.getElementById('checkoutPhone').value.trim();
@@ -1786,7 +2118,9 @@
             // إرسال عبر Formcarry
             const result = await submitOrderWithFormcarry(
                 finalName, finalPhone, finalEmail, finalAddress,
-                productsList, total, totalItems
+                productsList, total, totalItems,
+                selectedPaymentMethod,
+                receiptFile ? { file: receiptFile, fileName: receiptFileName } : null
             );
 
             if (result.success) {
@@ -1828,7 +2162,7 @@
         }
 
         // ============================================================
-        // 14. وظائف المنتجات
+        // 15. وظائف المنتجات
         // ============================================================
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('productsContainer');
@@ -1948,7 +2282,7 @@
         }
 
         // ============================================================
-        // 15. صورة 360
+        // 16. صورة 360
         // ============================================================
         function startDrag(e, id) {
             isDragging = true;
@@ -2022,7 +2356,7 @@
         }
 
         // ============================================================
-        // 16. السلة
+        // 17. السلة
         // ============================================================
         function toggleCart() {
             const sidebar = document.getElementById('cartSidebar');
@@ -2146,7 +2480,7 @@
         }
 
         // ============================================================
-        // 17. تفاصيل المنتج
+        // 18. تفاصيل المنتج
         // ============================================================
         function openProductDetails(productId) {
             const product = allProducts.find(p => p.id === productId);
@@ -2287,7 +2621,7 @@
         }
 
         // ============================================================
-        // 18. نموذج الطلب — Formcarry
+        // 19. نموذج الطلب — Formcarry
         // ============================================================
         const contactForm = document.getElementById('contactForm');
         if (contactForm) {
@@ -2298,7 +2632,7 @@
         }
 
         // ============================================================
-        // 19. ربط الأحداث
+        // 20. ربط الأحداث
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('scroll', () => {
@@ -2335,7 +2669,7 @@
             updateCartIconCount();
         });
 
-        console.log('✅ المتجر جاهز مع Google Sign-In و Formcarry و إكمال البيانات!');
+        console.log('✅ المتجر جاهز مع الدفع عند الاستلام + أونلاين + إنستاباي!');
     </script>
 </body>
 

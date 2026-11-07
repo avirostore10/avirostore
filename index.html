@@ -12,6 +12,8 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', "Segoe UI", Tahoma, sans-serif; }
@@ -58,34 +60,17 @@
 
         /* ===== زر Google ===== */
         .google-btn {
-            width: 100%;
-            padding: 13px;
-            background: #fff;
-            color: #111;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            width: 100%; padding: 13px; background: #fff; color: #111;
+            border: 2px solid #e0e0e0; border-radius: 12px; font-weight: 700;
+            font-size: 15px; cursor: pointer; transition: 0.3s; margin-bottom: 6px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             font-family: 'Cairo', sans-serif;
         }
         .google-btn:hover {
-            background: #f8f8f8;
-            border-color: #ff9900;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            background: #f8f8f8; border-color: #ff9900;
+            transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
-        .google-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .google-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         .google-btn svg { flex-shrink: 0; }
 
         .divider {
@@ -232,6 +217,30 @@
             font-weight: bold; min-width: 20px; text-align: center;
         }
 
+        /* ===== زر الطلبات (جديد) ===== */
+        .orders-btn {
+            background: linear-gradient(135deg,#16a34a,#15803d) !important;
+            border-color: #16a34a !important;
+        }
+        .orders-btn:hover {
+            background: linear-gradient(135deg,#15803d,#166534) !important;
+        }
+
+        /* ===== زر اللغة ===== */
+        .lang-btn {
+            background: linear-gradient(135deg, #0084ff, #0066cc) !important;
+            border-color: #0084ff !important;
+            color: #fff !important;
+            font-weight: 800 !important;
+            min-width: 50px;
+            justify-content: center;
+        }
+        .lang-btn:hover {
+            background: linear-gradient(135deg, #0066cc, #004d99) !important;
+            border-color: #0066cc !important;
+            transform: translateY(-1px);
+        }
+
         /* ===== شريط التصنيفات ===== */
         .categories-bar {
             background: #232f3e; padding: 0 25px; height: 45px;
@@ -322,6 +331,30 @@
         .product-card .free-shipping {
             font-size: 12px; color: #2e7d32; font-weight: 600;
             margin-top: 4px; display: block;
+        }
+
+        /* ===== ألوان المنتج ===== */
+        .color-selector {
+            display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; justify-content: flex-start;
+        }
+        .color-selector .color-option {
+            width: 28px; height: 28px; border-radius: 50%; border: 2px solid #e0e0e0;
+            cursor: pointer; transition: 0.3s; position: relative;
+        }
+        .color-selector .color-option:hover { transform: scale(1.15); border-color: #ff9900; }
+        .color-selector .color-option.selected {
+            border-color: #ff9900; box-shadow: 0 0 0 3px rgba(255,153,0,0.3); transform: scale(1.1);
+        }
+        .color-selector .color-option .color-tooltip {
+            display: none; position: absolute; bottom: -26px; left: 50%;
+            transform: translateX(-50%); background: #1a1a2e; color: #fff;
+            padding: 2px 8px; border-radius: 4px; font-size: 10px;
+            white-space: nowrap; z-index: 10;
+        }
+        .color-selector .color-option:hover .color-tooltip { display: block; }
+        .color-label {
+            font-size: 12px; font-weight: 700; color: #111;
+            margin-bottom: 4px; display: block;
         }
 
         /* ===== السلة ===== */
@@ -442,13 +475,15 @@
             display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
         }
         .forminit-contact-section input,
-        .forminit-contact-section textarea {
+        .forminit-contact-section textarea,
+        .forminit-contact-section select {
             padding: 12px 16px; border-radius: 10px; border: 2px solid #e0e0e0;
             background: #f8f8f8; color: #111; width: 100%; font-size: 15px;
-            transition: 0.3s; outline: none;
+            transition: 0.3s; outline: none; font-family: 'Cairo', sans-serif;
         }
         .forminit-contact-section input:focus,
-        .forminit-contact-section textarea:focus {
+        .forminit-contact-section textarea:focus,
+        .forminit-contact-section select:focus {
             border-color: #ff9900; background: #fff;
             box-shadow: 0 0 0 4px rgba(255,153,0,0.1);
         }
@@ -848,7 +883,6 @@
             .login-box { padding: 28px 20px; margin: 15px; }
             .login-box .logo-img { width: 70px; height: 70px; }
             .login-box h2 { font-size: 24px; }
-            footer .footer-content { grid-template-columns: 1fr; text-align: center; }
             .image-360-container { height: 160px; }
             .size-btn { font-size: 11px; padding: 5px 10px; }
             .back-to-top { width: 42px; height: 42px; font-size: 18px; bottom: 15px; left: 15px; }
@@ -865,6 +899,26 @@
             .product-details-info .specs { grid-template-columns: 1fr; }
             .privacy-modal-content { max-width: 96%; margin: 10px; }
             .payment-options { grid-template-columns: 1fr; }
+
+            footer { padding: 25px 12px 18px; }
+            footer .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                text-align: center;
+                margin-bottom: 15px;
+            }
+            footer .footer-content > div { padding: 12px 8px; }
+            footer .footer-content h4 { font-size: 13px; margin-bottom: 8px; }
+            footer .footer-content a {
+                font-size: 11px; margin-bottom: 5px;
+                display: flex; align-items: center; justify-content: center; gap: 4px;
+            }
+            footer .footer-content p { font-size: 11px !important; line-height: 1.5 !important; }
+            footer .footer-content a img {
+                width: 14px !important; height: 14px !important;
+                vertical-align: middle; flex-shrink: 0;
+            }
+            footer .footer-bottom { font-size: 12px; padding-top: 14px; }
         }
 
         @media(max-width: 480px) {
@@ -874,6 +928,21 @@
             .current-price { font-size: 16px; }
             .add-to-cart-btn { font-size: 12px; padding: 9px; }
             .size-btn { font-size: 10px; padding: 4px 8px; }
+
+            footer { padding: 20px 10px 15px; }
+            footer .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                margin-bottom: 12px;
+            }
+            footer .footer-content > div { padding: 10px 6px; }
+            footer .footer-content h4 { font-size: 11px; margin-bottom: 6px; }
+            footer .footer-content a { font-size: 10px; margin-bottom: 4px; gap: 3px; }
+            footer .footer-content p { font-size: 10px !important; line-height: 1.4 !important; }
+            footer .footer-content a img {
+                width: 12px !important; height: 12px !important;
+            }
+            footer .footer-bottom { font-size: 11px; padding-top: 10px; }
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -882,7 +951,6 @@
         ::-webkit-scrollbar-thumb:hover { background: #ff9900; }
     </style>
 </head>
-
 <body>
 
     <!-- ===== شاشة تسجيل الدخول ===== -->
@@ -900,25 +968,25 @@
                     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
                     <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
                 </svg>
-                تسجيل الدخول بـ Google
+                <span data-i18n="googleLoginBtn">تسجيل الدخول بـ Google</span>
             </button>
 
-            <div class="divider">أو</div>
+            <div class="divider" data-i18n="orText">أو</div>
 
-            <input type="email" id="loginEmail" placeholder="✉️ البريد الإلكتروني">
-            <input type="password" id="loginPassword" placeholder="🔑 كلمة المرور">
+            <input type="email" id="loginEmail" placeholder="✉️ البريد الإلكتروني" data-i18n-placeholder="emailPlaceholder">
+            <input type="password" id="loginPassword" placeholder="🔑 كلمة المرور" data-i18n-placeholder="passwordPlaceholder">
 
-            <button class="login-btn" id="loginBtn" onclick="handleLogin()">دخول 🚀</button>
+            <button class="login-btn" id="loginBtn" onclick="handleLogin()" data-i18n="loginBtn">دخول 🚀</button>
 
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
 
             <div class="forgot-password-link">
-                <a href="#" onclick="showResetPassword()">🔑 نسيت كلمة المرور؟</a>
+                <a href="#" onclick="showResetPassword()" data-i18n="forgotPassword">🔑 نسيت كلمة المرور؟</a>
             </div>
 
             <div class="register-link">
-                ليس لديك حساب؟ <a href="#" onclick="showRegister()">سجل الآن</a>
+                <span data-i18n="noAccount">ليس لديك حساب؟</span> <a href="#" onclick="showRegister()" data-i18n="registerNow">سجل الآن</a>
             </div>
         </div>
     </div>
@@ -928,8 +996,8 @@
         <div class="login-box">
             <button class="close-btn" onclick="closeRegister()">✕</button>
             <img src="https://j.top4top.io/p_386363vz11.jpg" alt="Aviro Logo" class="logo-img">
-            <h2><span>📝</span> إنشاء حساب</h2>
-            <p class="subtitle">سجل الآن للاستمتاع بتجربة التسوق</p>
+            <h2><span data-i18n="registerTitle">📝 إنشاء حساب</span></h2>
+            <p class="subtitle" data-i18n="registerSubtitle">سجل الآن للاستمتاع بتجربة التسوق</p>
 
             <button class="google-btn" id="googleRegisterBtn" onclick="handleGoogleLogin()">
                 <svg width="22" height="22" viewBox="0 0 48 48">
@@ -938,22 +1006,22 @@
                     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
                     <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
                 </svg>
-                التسجيل بـ Google
+                <span data-i18n="googleRegisterBtn">التسجيل بـ Google</span>
             </button>
 
-            <div class="divider">أو</div>
+            <div class="divider" data-i18n="orText">أو</div>
 
-            <input type="email" id="registerEmail" placeholder="✉️ البريد الإلكتروني">
-            <input type="password" id="registerPassword" placeholder="🔑 كلمة المرور (6 أحرف على الأقل)">
-            <input type="password" id="registerConfirmPassword" placeholder="🔑 تأكيد كلمة المرور">
+            <input type="email" id="registerEmail" placeholder="✉️ البريد الإلكتروني" data-i18n-placeholder="emailPlaceholder">
+            <input type="password" id="registerPassword" placeholder="🔑 كلمة المرور (6 أحرف على الأقل)" data-i18n-placeholder="passwordMin6">
+            <input type="password" id="registerConfirmPassword" placeholder="🔑 تأكيد كلمة المرور" data-i18n-placeholder="confirmPassword">
 
-            <button class="login-btn" id="registerBtn" onclick="handleRegister()">إنشاء حساب ✨</button>
+            <button class="login-btn" id="registerBtn" onclick="handleRegister()" data-i18n="createAccountBtn">إنشاء حساب ✨</button>
 
             <div id="registerError" class="login-error"></div>
             <div id="registerSuccess" class="login-success"></div>
 
             <div class="register-link">
-                لديك حساب بالفعل؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a>
+                <span data-i18n="haveAccount">لديك حساب بالفعل؟</span> <a href="#" onclick="showLogin()" data-i18n="loginNow">تسجيل الدخول</a>
             </div>
         </div>
     </div>
@@ -963,28 +1031,28 @@
         <div class="login-box">
             <button class="close-btn" onclick="showLogin()">✕</button>
             <img src="https://j.top4top.io/p_386363vz11.jpg" alt="Aviro Logo" class="logo-img">
-            <h2><span>🔑</span> إعادة تعيين</h2>
-            <p class="subtitle">اختر إحدى الطرق التالية</p>
+            <h2><span data-i18n="resetTitle">🔑 إعادة تعيين</span></h2>
+            <p class="subtitle" data-i18n="resetSubtitle">اختر إحدى الطرق التالية</p>
 
-            <input type="email" id="resetEmail" placeholder="✉️ البريد الإلكتروني">
-            <button class="login-btn" id="resetPasswordBtn" onclick="handleResetPassword()" style="margin-top:5px;">📧 إرسال رابط إعادة التعيين</button>
+            <input type="email" id="resetEmail" placeholder="✉️ البريد الإلكتروني" data-i18n-placeholder="emailPlaceholder">
+            <button class="login-btn" id="resetPasswordBtn" onclick="handleResetPassword()" style="margin-top:5px;" data-i18n="sendResetLink">📧 إرسال رابط إعادة التعيين</button>
             <div id="resetError" class="login-error"></div>
             <div id="resetSuccess" class="login-success"></div>
 
-            <div class="divider">━━━━━━━━━ أو ━━━━━━━━━</div>
+            <div class="divider" data-i18n="orDivider">━━━━━━━━━ أو ━━━━━━━━━</div>
 
             <div class="reset-manual-box">
-                <h3>🔧 تغيير كلمة المرور يدوياً</h3>
-                <input type="email" id="manualEmail" placeholder="✉️ البريد الإلكتروني">
-                <input type="password" id="manualOldPassword" placeholder="🔑 كلمة المرور الحالية">
-                <input type="password" id="manualNewPassword" placeholder="🔑 كلمة المرور الجديدة (6 أحرف)">
-                <input type="password" id="manualConfirmPassword" placeholder="🔑 تأكيد كلمة المرور الجديدة">
-                <button class="small-btn" id="manualResetBtn" onclick="handleManualReset()">🔄 تغيير كلمة المرور</button>
+                <h3 data-i18n="manualResetTitle">🔧 تغيير كلمة المرور يدوياً</h3>
+                <input type="email" id="manualEmail" placeholder="✉️ البريد الإلكتروني" data-i18n-placeholder="emailPlaceholder">
+                <input type="password" id="manualOldPassword" placeholder="🔑 كلمة المرور الحالية" data-i18n-placeholder="currentPassword">
+                <input type="password" id="manualNewPassword" placeholder="🔑 كلمة المرور الجديدة (6 أحرف)" data-i18n-placeholder="newPasswordMin6">
+                <input type="password" id="manualConfirmPassword" placeholder="🔑 تأكيد كلمة المرور الجديدة" data-i18n-placeholder="confirmNewPassword">
+                <button class="small-btn" id="manualResetBtn" onclick="handleManualReset()" data-i18n="changePasswordBtn">🔄 تغيير كلمة المرور</button>
                 <div id="manualResetResult" class="reset-result"></div>
             </div>
 
             <div class="register-link" style="margin-top: 20px;">
-                تذكرت كلمة المرور؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a>
+                <span data-i18n="rememberPassword">تذكرت كلمة المرور؟</span> <a href="#" onclick="showLogin()" data-i18n="loginNow">تسجيل الدخول</a>
             </div>
         </div>
     </div>
@@ -1001,43 +1069,47 @@
                 <span>Aviro</span>
             </a>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="ابحث عن أي منتج..." onkeyup="searchProducts()">
+                <input type="text" id="searchInput" placeholder="ابحث عن أي منتج..." onkeyup="searchProducts()" data-i18n-placeholder="searchPlaceholder">
                 <button onclick="searchProducts()">🔍</button>
             </div>
             <div class="header-buttons">
-                <span class="user-email" id="userEmailDisplay">زائر</span>
-                <button class="login-btn-header" id="headerLoginBtn" onclick="showLogin()">🔐 دخول</button>
-                <button class="account-btn" id="accountBtn" onclick="openProfileModal(auth.currentUser)" style="display:none;">👤 حسابي</button>
+                <span class="user-email" id="userEmailDisplay" data-i18n="guest">زائر</span>
+                <button class="login-btn-header" id="headerLoginBtn" onclick="showLogin()" data-i18n="login">🔐 دخول</button>
+                <button class="account-btn" id="accountBtn" onclick="openProfileModal(auth.currentUser)" style="display:none;" data-i18n="myAccount">👤 حسابي</button>
                 <button class="cart-btn" onclick="toggleCart()">
                     🛒 <span class="cart-badge" id="CartCount">0</span>
                 </button>
-                <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display:none;">🚪 خروج</button>
+                <button class="logout-btn" id="logoutBtn" onclick="handleLogout()" style="display:none;" data-i18n="logout">🚪 خروج</button>
+                <!-- ===== زر الطلبات (جديد) ===== -->
+                <button class="orders-btn" onclick="openOrdersPanel()" title="الطلبات الواردة">📋 الطلبات</button>
+                <!-- ===== زر تبديل اللغة ===== -->
+                <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()" title="تغيير اللغة / Change Language">🌐 <span id="langLabel">EN</span></button>
             </div>
         </header>
 
         <!-- شريط التصنيفات -->
         <nav class="categories-bar" id="categoriesBar">
-            <a href="#" class="active" data-category="all" onclick="filterProducts('all')">الكل</a>
-            <a href="#" data-category="ترنجات" onclick="filterProducts('ترنجات')">👕 ترنجات </a>
-            <a href="#" data-category="اشرات" onclick="filterProducts('اشرات')"> 🩳 اشرات </a>
-            <a href="#" data-category="بنطلونات" onclick="filterProducts('بنطلونات')"> 👖 بنطلونات </a>
-            <a href="#" data-category="شربات" onclick="filterProducts('شربات')">🧦 شربات </a>
+            <a href="#" class="active" data-category="all" onclick="filterProducts('all')" data-i18n="catAll">الكل</a>
+            <a href="#" data-category="ترنجات" onclick="filterProducts('ترنجات')" data-i18n="catTracksuits">👕 ترنجات</a>
+            <a href="#" data-category="اشرات" onclick="filterProducts('اشرات')" data-i18n="catShorts">🩳 اشرات</a>
+            <a href="#" data-category="بنطلونات" onclick="filterProducts('بنطلونات')" data-i18n="catPants">👖 بنطلونات</a>
+            <a href="#" data-category="شربات" onclick="filterProducts('شربات')" data-i18n="catSocks">🧦 شربات</a>
         </nav>
 
         <!-- الهيرو -->
         <section class="hero">
             <div class="hero-text">
-                <h1>أهلاً بك في <span>Aviro</span></h1>
-                <p>🛍️ أفضل العروض والمنتجات بأفضل الأسعار</p>
+                <h1 data-i18n-html="heroTitle">أهلاً بك في <span>Aviro</span></h1>
+                <p data-i18n="heroSubtitle">🛍️ أفضل العروض والمنتجات بأفضل الأسعار</p>
             </div>
         </section>
 
         <!-- المنتجات -->
-        <div class="section-title">🛍️ <span>منتجاتنا</span></div>
+        <div class="section-title" data-i18n-html="ourProductsTitle">🛍️ <span>منتجاتنا</span></div>
 
         <div id="loadingSpinner" class="loading-spinner">
             <div class="spinner"></div>
-            <p style="color:#888;">جاري تحميل المنتجات...</p>
+            <p style="color:#888;" data-i18n="loadingProducts">جاري تحميل المنتجات...</p>
         </div>
 
         <main id="productsContainer"></main>
@@ -1045,22 +1117,22 @@
         <!-- سلة التسوق -->
         <aside class="cart-sidebar" id="cartSidebar">
             <div class="cart-header">
-                <h2>🛒 <span>عربة</span> التسوق</h2>
+                <h2 data-i18n-html="cartTitle">🛒 <span>عربة</span> التسوق</h2>
                 <button onclick="toggleCart()">✕</button>
             </div>
             <div id="cartItems">
                 <div class="empty-cart-msg">
                     <span class="icon">🛒</span>
-                    <p>لا توجد منتجات في العربة</p>
+                    <p data-i18n="cartEmpty">لا توجد منتجات في العربة</p>
                 </div>
             </div>
             <div class="cart-footer">
                 <div class="total-row">
-                    <h3>الإجمالي</h3>
-                    <h2><span id="cartTotal">0</span> ج.م</h2>
+                    <h3 data-i18n="totalLabel">الإجمالي</h3>
+                    <h2><span id="cartTotal">0</span> <span data-i18n="currencyLabel">ج.م</span></h2>
                 </div>
-                <button class="checkout-btn" onclick="checkout()">إتمام الشراء ✅</button>
-                <button class="clear-cart-btn" onclick="clearCart()">🗑️ تفريغ العربة</button>
+                <button class="checkout-btn" onclick="checkout()" data-i18n="checkoutBtn">إتمام الشراء ✅</button>
+                <button class="clear-cart-btn" onclick="clearCart()" data-i18n="clearCartBtn">🗑️ تفريغ العربة</button>
             </div>
         </aside>
 
@@ -1070,18 +1142,31 @@
         <!-- زر العودة للأعلى -->
         <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆</button>
 
+        <!-- ===== مودال الطلبات (جديد) ===== -->
+        <div id="ordersModal" class="privacy-modal">
+            <div class="privacy-modal-content" style="max-width: 700px;">
+                <div class="privacy-modal-header">
+                    <h2>📋 <span>الطلبات</span> الواردة</h2>
+                    <button onclick="closeOrdersPanel()">✕</button>
+                </div>
+                <div class="privacy-modal-body" id="ordersBody" style="max-height: 70vh; overflow-y: auto;">
+                    <p style="text-align:center; color:#888;">⏳ جاري التحميل...</p>
+                </div>
+            </div>
+        </div>
+
         <!-- مودال الخصوصية -->
         <div id="privacyModal" class="privacy-modal">
             <div class="privacy-modal-content">
                 <div class="privacy-modal-header">
-                    <h2>🔒 <span>سياسة</span> الخصوصية</h2>
+                    <h2 data-i18n-html="privacyTitle">🔒 <span>سياسة</span> الخصوصية</h2>
                     <button onclick="closePrivacyPolicy()">✕</button>
                 </div>
                 <div class="privacy-modal-body">
-                    <h3>سياسة الخصوصية</h3>
-                    <p>يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به القانون.</p>
-                    <p>جميع بيانات الدفع يتم تشفيرها باستخدام تقنيات آمنة.</p>
-                    <p>يمكنك طلب حذف بياناتك في أي وقت عبر التواصل معنا.</p>
+                    <h3 data-i18n="privacyHeading">سياسة الخصوصية</h3>
+                    <p data-i18n="privacyP1">يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به القانون.</p>
+                    <p data-i18n="privacyP2">جميع بيانات الدفع يتم تشفيرها باستخدام تقنيات آمنة.</p>
+                    <p data-i18n="privacyP3">يمكنك طلب حذف بياناتك في أي وقت عبر التواصل معنا.</p>
                     <p>📧 <strong>avirostore10@gmail.com</strong></p>
                 </div>
             </div>
@@ -1091,7 +1176,7 @@
         <div id="productDetailsModal" class="privacy-modal">
             <div class="privacy-modal-content" style="max-width: 950px; max-height: 95vh; overflow-y: auto;">
                 <div class="privacy-modal-header">
-                    <h2>📦 <span>تفاصيل</span> المنتج</h2>
+                    <h2 data-i18n-html="productDetailsTitle">📦 <span>تفاصيل</span> المنتج</h2>
                     <button onclick="closeProductDetails()">✕</button>
                 </div>
                 <div class="privacy-modal-body" id="productDetailsBody">
@@ -1100,30 +1185,63 @@
             </div>
         </div>
 
-        <!-- مودال إكمال البيانات -->
+        <!-- ===== مودال إكمال البيانات ===== -->
         <div id="profileCompletionModal" class="privacy-modal">
             <div class="privacy-modal-content" style="max-width: 480px;">
                 <div class="privacy-modal-header">
-                    <h2>👤 <span>أكمل</span> بياناتك</h2>
+                    <h2 data-i18n-html="completeProfileTitle">👤 <span>أكمل</span> بياناتك</h2>
                     <button onclick="closeProfileModal()">✕</button>
                 </div>
                 <div class="privacy-modal-body">
-                    <p style="text-align:center; color:#666; margin-bottom:20px; font-size:14px;">
+                    <p style="text-align:center; color:#666; margin-bottom:20px; font-size:14px;" data-i18n="profileIntro">
                         ✨ يرجى إدخال بياناتك لإتمام تجربة التسوق
                     </p>
 
                     <form id="profileForm" onsubmit="saveProfileData(event)">
                         <div style="display:flex; flex-direction:column; gap:12px;">
-                            <input type="text" id="profileFirstName" placeholder="👤 الاسم الأول" required
+                            <input type="text" id="profileFirstName" placeholder="👤 الاسم الأول" required data-i18n-placeholder="firstNamePlaceholder"
                                 style="padding:14px 18px; border:2px solid #e0e0e0; border-radius:12px; background:#f8f8f8; font-size:15px; outline:none; font-family:'Cairo',sans-serif; text-align:right;">
-                            <input type="text" id="profileLastName" placeholder="👤 الاسم الأخير" required
+                            <input type="text" id="profileLastName" placeholder="👤 الاسم الأخير" required data-i18n-placeholder="lastNamePlaceholder"
                                 style="padding:14px 18px; border:2px solid #e0e0e0; border-radius:12px; background:#f8f8f8; font-size:15px; outline:none; font-family:'Cairo',sans-serif; text-align:right;">
-                            <input type="tel" id="profilePhone" placeholder="📱 رقم التلفون (مثال: 01012345678)" required
-                                style="padding:14px 18px; border:2px solid #e0e0e0; border-radius:12px; background:#f8f8f8; font-size:15px; outline:none; font-family:'Cairo',sans-serif; text-align:right;">
-                            <input type="text" id="profileAddress" placeholder="📍 العنوان بالتفصيل (المحافظة - المدينة - الشارع)" required
+                            <input type="tel" id="profilePhone" placeholder="📱 رقم التلفون (مثال: 01012345678)" required data-i18n-placeholder="phonePlaceholder"
                                 style="padding:14px 18px; border:2px solid #e0e0e0; border-radius:12px; background:#f8f8f8; font-size:15px; outline:none; font-family:'Cairo',sans-serif; text-align:right;">
 
-                            <button type="submit"
+                            <select id="profileGovernorate" required data-i18n-select="governorateFirst"
+                                style="padding:14px 18px; border:2px solid #e0e0e0; border-radius:12px; background:#f8f8f8; font-size:15px; outline:none; font-family:'Cairo',sans-serif; text-align:right; cursor:pointer;">
+                                <option value="">🏛️ اختر المحافظة</option>
+                                <option value="القاهرة">القاهرة</option>
+                                <option value="الجيزة">الجيزة</option>
+                                <option value="الإسكندرية">الإسكندرية</option>
+                                <option value="القليوبية">القليوبية</option>
+                                <option value="الشرقية">الشرقية</option>
+                                <option value="الدقهلية">الدقهلية</option>
+                                <option value="البحيرة">البحيرة</option>
+                                <option value="المنوفية">المنوفية</option>
+                                <option value="الغربية">الغربية</option>
+                                <option value="كفر الشيخ">كفر الشيخ</option>
+                                <option value="دمياط">دمياط</option>
+                                <option value="بورسعيد">بورسعيد</option>
+                                <option value="الإسماعيلية">الإسماعيلية</option>
+                                <option value="السويس">السويس</option>
+                                <option value="شمال سيناء">شمال سيناء</option>
+                                <option value="جنوب سيناء">جنوب سيناء</option>
+                                <option value="الأقصر">الأقصر</option>
+                                <option value="أسوان">أسوان</option>
+                                <option value="أسيوط">أسيوط</option>
+                                <option value="سوهاج">سوهاج</option>
+                                <option value="قنا">قنا</option>
+                                <option value="المنيا">المنيا</option>
+                                <option value="بني سويف">بني سويف</option>
+                                <option value="الفيوم">الفيوم</option>
+                                <option value="مطروح">مطروح</option>
+                                <option value="الوادي الجديد">الوادي الجديد</option>
+                                <option value="البحر الأحمر">البحر الأحمر</option>
+                            </select>
+
+                            <input type="text" id="profileAddress" placeholder="📍 العنوان بالتفصيل (الشارع - المنطقة - علامة مميزة)" required data-i18n-placeholder="addressPlaceholder"
+                                style="padding:14px 18px; border:2px solid #e0e0e0; border-radius:12px; background:#f8f8f8; font-size:15px; outline:none; font-family:'Cairo',sans-serif; text-align:right;">
+
+                            <button type="submit" data-i18n="saveProfileBtn"
                                 style="padding:15px; background:linear-gradient(135deg,#ff9900,#e68a00); color:#fff; border:none; border-radius:12px; font-weight:bold; font-size:17px; cursor:pointer; margin-top:8px; transition:0.3s;">
                                 💾 حفظ البيانات ومتابعة التسوق
                             </button>
@@ -1138,55 +1256,53 @@
         <div id="checkoutModal" class="privacy-modal">
             <div class="privacy-modal-content" style="max-width: 560px;">
                 <div class="privacy-modal-header">
-                    <h2 id="checkoutModalTitle">💳 <span>بيانات</span> الدفع</h2>
+                    <h2 id="checkoutModalTitle" data-i18n-html="paymentTitle">💳 <span>بيانات</span> الدفع</h2>
                     <button onclick="closeCheckoutModal()">✕</button>
                 </div>
                 <div class="privacy-modal-body">
 
-                    <!-- مؤشر الخطوات -->
                     <div class="step-indicator">
                         <div class="step active" id="stepIndicator1">
                             <span class="step-num">1</span>
-                            <span>الدفع</span>
+                            <span data-i18n="paymentStep">الدفع</span>
                         </div>
                         <div class="step-line"></div>
                         <div class="step" id="stepIndicator2">
                             <span class="step-num">2</span>
-                            <span>الشحن</span>
+                            <span data-i18n="shippingStep">الشحن</span>
                         </div>
                     </div>
 
                     <!-- ===== الخطوة 1: بيانات الدفع ===== -->
                     <div id="paymentStep">
-                        <label style="display:block; font-weight:700; font-size:14px; color:#111; margin-bottom:10px;">
+                        <label style="display:block; font-weight:700; font-size:14px; color:#111; margin-bottom:10px;" data-i18n="choosePaymentLabel">
                             💳 اختر طريقة الدفع:
                         </label>
                         <div class="payment-options">
                             <div class="payment-option" id="payCashOption" onclick="selectPaymentMethod('cash')">
                                 <span class="pay-icon">💵</span>
-                                <span class="pay-label">الدفع عند الاستلام</span>
+                                <span class="pay-label" data-i18n="cashPaymentLabel">الدفع عند الاستلام</span>
                             </div>
                             <div class="payment-option" id="payOnlineOption" onclick="selectPaymentMethod('online')">
                                 <span class="pay-icon">💳</span>
-                                <span class="pay-label">الدفع أونلاين (إنستاباي)</span>
+                                <span class="pay-label" data-i18n="onlinePaymentLabel">الدفع أونلاين (إنستاباي)</span>
                             </div>
                         </div>
 
-                        <!-- قسم الدفع الإلكتروني -->
                         <div class="online-payment-section" id="onlinePaymentSection">
-                            <h4>📱 قم بتحويل المبلغ إلى رقم إنستاباي:</h4>
+                            <h4 data-i18n="instapayTitle">📱 قم بتحويل المبلغ إلى رقم إنستاباي:</h4>
                             <div class="instapay-number-box">
                                 <span class="number">01108776432</span>
-                                <button type="button" class="copy-instapay-btn" onclick="copyInstapayNumber()">
+                                <button type="button" class="copy-instapay-btn" onclick="copyInstapayNumber()" data-i18n="copyBtn">
                                     📋 نسخ
                                 </button>
                             </div>
-                            <p class="instapay-hint">⚠️ بعد التحويل، ارفع صورة إيصال التحويل أدناه</p>
+                            <p class="instapay-hint" data-i18n="instapayHint">⚠️ بعد التحويل، ارفع صورة إيصال التحويل أدناه</p>
 
                             <div class="receipt-upload-section" id="receiptUploadSection">
                                 <label class="receipt-upload-label" for="receiptFile">
                                     <span class="upload-icon">📸</span>
-                                    <span class="upload-text">اضغط لرفع صورة إيصال التحويل</span>
+                                    <span class="upload-text" data-i18n="uploadReceiptText">اضغط لرفع صورة إيصال التحويل</span>
                                     <span class="upload-subtext">(jpg, png, pdf)</span>
                                 </label>
                                 <input type="file" id="receiptFile" accept="image/*,application/pdf" onchange="handleReceiptUpload(event)">
@@ -1197,7 +1313,7 @@
                             </div>
                         </div>
 
-                        <button type="button" onclick="goToShippingStep()" id="nextToShippingBtn"
+                        <button type="button" onclick="goToShippingStep()" id="nextToShippingBtn" data-i18n="nextToShippingBtn"
                             style="width:100%; padding:16px; background:linear-gradient(135deg,#ff9900,#e68a00); color:#fff; border:none; border-radius:12px; font-weight:bold; font-size:18px; cursor:pointer; margin-top:20px; transition:0.3s;">
                             التالي: بيانات الشحن ←
                         </button>
@@ -1209,22 +1325,59 @@
                             <form id="contactForm">
                                 <div class="form-grid">
                                     <div class="full-width" style="margin-bottom: 8px;">
-                                        <label style="font-weight:700; font-size:14px; color:#111;">📍 بيانات الشحن:</label>
+                                        <label style="font-weight:700; font-size:14px; color:#111;" data-i18n="shippingDataLabel">📍 بيانات الشحن:</label>
                                     </div>
 
-                                    <input type="text" name="firstName" id="checkoutFirstName" placeholder="الاسم الأول" required>
-                                    <input type="text" name="lastName" id="checkoutLastName" placeholder="الاسم الأخير" required>
-                                    <input type="text" name="phone" id="checkoutPhone" placeholder="رقم الهاتف" required>
-                                    <input type="text" name="address" id="checkoutAddress" placeholder="العنوان" required>
-                                    <input type="email" name="email" id="checkoutEmail" placeholder="البريد الإلكتروني" required class="full-width">
+                                    <input type="text" name="firstName" id="checkoutFirstName" placeholder="الاسم الأول" required data-i18n-placeholder="firstNameShort">
+                                    <input type="text" name="lastName" id="checkoutLastName" placeholder="الاسم الأخير" required data-i18n-placeholder="lastNameShort">
+                                    <input type="text" name="phone" id="checkoutPhone" placeholder="رقم الهاتف" required data-i18n-placeholder="phoneShort">
+
+                                    <div class="full-width">
+                                        <label style="display:block; font-weight:700; font-size:14px; color:#111; margin-bottom:6px;" data-i18n="governorateLabel">
+                                            🏛️ اختر المحافظة:
+                                        </label>
+                                        <select name="governorate" id="checkoutGovernorate" required data-i18n-select="governorateFirstCheckout">
+                                            <option value="">-- اختر المحافظة --</option>
+                                            <option value="القاهرة">القاهرة</option>
+                                            <option value="الجيزة">الجيزة</option>
+                                            <option value="الإسكندرية">الإسكندرية</option>
+                                            <option value="القليوبية">القليوبية</option>
+                                            <option value="الشرقية">الشرقية</option>
+                                            <option value="الدقهلية">الدقهلية</option>
+                                            <option value="البحيرة">البحيرة</option>
+                                            <option value="المنوفية">المنوفية</option>
+                                            <option value="الغربية">الغربية</option>
+                                            <option value="كفر الشيخ">كفر الشيخ</option>
+                                            <option value="دمياط">دمياط</option>
+                                            <option value="بورسعيد">بورسعيد</option>
+                                            <option value="الإسماعيلية">الإسماعيلية</option>
+                                            <option value="السويس">السويس</option>
+                                            <option value="شمال سيناء">شمال سيناء</option>
+                                            <option value="جنوب سيناء">جنوب سيناء</option>
+                                            <option value="الأقصر">الأقصر</option>
+                                            <option value="أسوان">أسوان</option>
+                                            <option value="أسيوط">أسيوط</option>
+                                            <option value="سوهاج">سوهاج</option>
+                                            <option value="قنا">قنا</option>
+                                            <option value="المنيا">المنيا</option>
+                                            <option value="بني سويف">بني سويف</option>
+                                            <option value="الفيوم">الفيوم</option>
+                                            <option value="مطروح">مطروح</option>
+                                            <option value="الوادي الجديد">الوادي الجديد</option>
+                                            <option value="البحر الأحمر">البحر الأحمر</option>
+                                        </select>
+                                    </div>
+
+                                    <input type="text" name="address" id="checkoutAddress" placeholder="العنوان بالتفصيل" required class="full-width" data-i18n-placeholder="addressShort">
+                                    <input type="email" name="email" id="checkoutEmail" placeholder="البريد الإلكتروني" required class="full-width" data-i18n-placeholder="emailShort">
                                     <textarea name="orderSummary" placeholder="ملخص الطلب..." rows="8" class="full-width order-message-textarea" id="orderMessage" readonly></textarea>
 
-                                    <button type="button" onclick="backToPaymentStep()"
+                                    <button type="button" onclick="backToPaymentStep()" data-i18n="backToPaymentBtn"
                                         style="grid-column:1/-1; padding:12px; background:#f0f0f0; color:#111; border:none; border-radius:10px; font-weight:600; font-size:15px; cursor:pointer; margin-top:4px;">
                                         → العودة لبيانات الدفع
                                     </button>
 
-                                    <button type="submit" class="submit-btn" id="contactSubmitBtn">📧 تأكيد وإرسال الطلب</button>
+                                    <button type="submit" class="submit-btn" id="contactSubmitBtn" data-i18n="confirmOrderBtn">📧 تأكيد وإرسال الطلب</button>
                                     <p id="contactStatus" class="status-msg"></p>
                                 </div>
                             </form>
@@ -1239,7 +1392,7 @@
         <div id="aboutModal" class="privacy-modal">
             <div class="privacy-modal-content">
                 <div class="privacy-modal-header">
-                    <h2>📖 <span>من نحن</span></h2>
+                    <h2 data-i18n-html="aboutTitle">📖 <span>من نحن</span></h2>
                     <button onclick="closeAboutModal()">✕</button>
                 </div>
                 <div class="privacy-modal-body">
@@ -1247,23 +1400,23 @@
                         <img src="https://g.top4top.io/p_38369skks1.jpeg" alt="Aviro Store"
                             style="width: 100px; height: 100px; border-radius: 50%; object-fit: contain; background: #fff; padding: 10px; border: 3px solid #ff9900;">
                         <h2 style="color: #111; margin-top: 15px;">🛍️ <span style="color: #ff9900;">Aviro</span> Store</h2>
-                        <p style="color: #666; font-size: 14px;">متجرك الأول للملابس والترنجات في مصر</p>
+                        <p style="color: #666; font-size: 14px;" data-i18n="aboutTagline">متجرك الأول للملابس والترنجات في مصر</p>
                     </div>
-                    <h3>🌟 رؤيتنا</h3>
-                    <p style="margin-bottom: 20px; line-height: 1.8;">
+                    <h3 data-i18n="ourVision">🌟 رؤيتنا</h3>
+                    <p style="margin-bottom: 20px; line-height: 1.8;" data-i18n="visionText">
                         في <strong style="color: #ff9900;">Aviro Store</strong>، نسعى لنكون الوجهة الأولى للتسوق الإلكتروني في مصر.
                     </p>
-                    <h3>💪 رسالتنا</h3>
-                    <p style="margin-bottom: 20px; line-height: 1.8;">
+                    <h3 data-i18n="ourMission">💪 رسالتنا</h3>
+                    <p style="margin-bottom: 20px; line-height: 1.8;" data-i18n="missionText">
                         نهدف إلى توفير منتجات عالية الجودة في مجال الملابس والترنجات.
                     </p>
-                    <h3>📞 تواصل معنا</h3>
+                    <h3 data-i18n="contactHeading">📞 تواصل معنا</h3>
                     <p style="line-height: 2;">
-                        📧 البريد: <strong style="color: #ff9900;">avirostore10@gmail.com</strong><br>
-                        📱 واتساب: <strong style="color: #ff9900;">+201108776432</strong>
+                        <span data-i18n="emailLabel">📧 البريد:</span> <strong style="color: #ff9900;">avirostore10@gmail.com</strong><br>
+                        <span data-i18n="whatsappLabel">📱 واتساب:</span> <strong style="color: #ff9900;">+201108776432</strong>
                     </p>
                     <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-                        <p style="color: #888; font-size: 14px;">
+                        <p style="color: #888; font-size: 14px;" data-i18n="footerCopyright">
                             © 2026 <strong style="color: #ff9900;">Aviro Store</strong> – شكراً لثقتكم بنا 🙏
                         </p>
                     </div>
@@ -1276,38 +1429,38 @@
             <div class="footer-content">
                 <div>
                     <h4>🛍️ Aviro Store</h4>
-                    <p style="color:#888; font-size:14px; line-height:1.8;">
+                    <p style="color:#888; font-size:14px; line-height:1.8;" data-i18n-html="footerAbout">
                         أفضل متجر إلكتروني في مصر<br>نقدم لكم أفضل المنتجات بأفضل الأسعار
                     </p>
                 </div>
                 <div>
-                    <h4>روابط سريعة</h4>
-                    <a href="#" onclick="filterProducts('all')">المنتجات</a>
-                    <a href="#" onclick="showPrivacyPolicy(event)">سياسة الخصوصية</a>
-                    <a href="#" onclick="showAboutModal(event)">من نحن</a>
-                    <a href="mailto:avirostore10@gmail.com">التواصل معنا</a>
+                    <h4 data-i18n="footerQuickLinks">روابط سريعة</h4>
+                    <a href="#" onclick="filterProducts('all')" data-i18n="footerProducts">المنتجات</a>
+                    <a href="#" onclick="showPrivacyPolicy(event)" data-i18n="footerPrivacy">سياسة الخصوصية</a>
+                    <a href="#" onclick="showAboutModal(event)" data-i18n="footerAboutLink">من نحن</a>
+                    <a href="mailto:avirostore10@gmail.com" data-i18n="footerContact">التواصل معنا</a>
                 </div>
                 <div>
-                    <h4>معلومات</h4>
-                    <a href="#" onclick="showAboutModal(event)">من نحن</a>
-                    <a href="#">الشحن والتوصيل</a>
-                    <a href="#">الإرجاع والاستبدال</a>
+                    <h4 data-i18n="footerInfo">معلومات</h4>
+                    <a href="#" onclick="showAboutModal(event)" data-i18n="footerAboutLink">من نحن</a>
+                    <a href="#" data-i18n="footerShipping">الشحن والتوصيل</a>
+                    <a href="#" data-i18n="footerReturns">الإرجاع والاستبدال</a>
                 </div>
                 <div>
-                    <h4>📞 تواصل معنا</h4>
+                    <h4 data-i18n="footerContactTitle">📞 تواصل معنا</h4>
                     <a href="mailto:avirostore10@gmail.com">
-                        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="إيميل" width="20" height="20"> البريد الإلكتروني
+                        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="إيميل" width="20" height="20"> <span data-i18n="footerEmail">البريد الإلكتروني</span>
                     </a>
                     <a href="https://wa.me/201108776432" target="_blank">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب" width="20" height="20"> واتساب
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="واتساب" width="20" height="20"> <span data-i18n="footerWhatsapp">واتساب</span>
                     </a>
                     <a href="https://www.facebook.com/share/1c6otjvVbP/" target="_blank">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="فيسبوك" width="20" height="20"> فيسبوك
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="فيسبوك" width="20" height="20"> <span data-i18n="footerFacebook">فيسبوك</span>
                     </a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 <span style="color:#ff9900;">Aviro Store</span>. جميع الحقوق محفوظة</p>
+                <p data-i18n-html="footerBottom">© 2026 <span style="color:#ff9900;">Aviro Store</span>. جميع الحقوق محفوظة</p>
             </div>
         </footer>
     </div>
@@ -1331,13 +1484,14 @@
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-        // Google Provider
         const googleProvider = new firebase.auth.GoogleAuthProvider();
         googleProvider.setCustomParameters({ prompt: 'select_account' });
         googleProvider.addScope('email');
         googleProvider.addScope('profile');
-        console.log('✅ Firebase & Google Provider initialized!');
+        console.log('✅ Firebase, Firestore & Storage initialized!');
 
         // ============================================================
         // 2. Formcarry Configuration
@@ -1352,9 +1506,17 @@
         const allProducts = [{
             id: 1,
             name: "شورت رجالي صيفي مريح - متعدد الألوان",
+            nameEn: "Men's Summer Comfortable Shorts - Multi Colors",
             price: 1, oldPrice: 16, discount: "27%",
             category: "اشرات", rating: 4.5, reviews: 128,
             sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+            colors: [
+                { name: "أسود", nameEn: "Black", hex: "#000000" },
+                { name: "أبيض", nameEn: "White", hex: "#ffffff" },
+                { name: "أزرق", nameEn: "Blue", hex: "#2563eb" },
+                { name: "رمادي", nameEn: "Gray", hex: "#6b7280" },
+                { name: "بيج", nameEn: "Beige", hex: "#d4b896" }
+            ],
             images360: [
                 "https://d.top4top.io/p_3834obtdm1.jpeg",
                 "https://h.top4top.io/p_383483fep1.jpeg",
@@ -1382,27 +1544,43 @@
             ],
             freeShipping: true,
             description: "شورت رجالي صيفي مصنوع من قطن عالي الجودة، مريح ومناسب للاستخدام اليومي.",
-            brand: "Aviro", material: "قطن 100%", warranty: "ضمان لمدة 30 يوم"
+            descriptionEn: "Men's summer shorts made of high-quality cotton, comfortable and suitable for daily use.",
+            brand: "Aviro", material: "قطن 100%", materialEn: "100% Cotton", warranty: "ضمان لمدة 30 يوم", warrantyEn: "30 Days Warranty"
         }, {
             id: 2,
             name: "تيشيرت كلاسيك قطني 100% - جودة عالية",
+            nameEn: "Classic 100% Cotton T-Shirt - High Quality",
             price: 756, oldPrice: 1050, discount: "28%",
             category: "ترنجات", rating: 4.8, reviews: 256,
             sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+            colors: [
+                { name: "أبيض", nameEn: "White", hex: "#ffffff" },
+                { name: "أسود", nameEn: "Black", hex: "#000000" },
+                { name: "رمادي", nameEn: "Gray", hex: "#6b7280" },
+                { name: "كحلي", nameEn: "Navy", hex: "#1e3a8a" }
+            ],
             image: "https://e.top4top.io/p_3832v2k2m1.jpg",
             freeShipping: true,
             description: "تيشيرت كلاسيكي مصنوع من القطن الخالص 100%، ناعم ومريح للبشرة.",
-            brand: "Aviro", material: "قطن 100%", warranty: "ضمان لمدة 30 يوم"
+            descriptionEn: "Classic T-shirt made of 100% pure cotton, soft and comfortable on the skin.",
+            brand: "Aviro", material: "قطن 100%", materialEn: "100% Cotton", warranty: "ضمان لمدة 30 يوم", warrantyEn: "30 Days Warranty"
         }, {
             id: 3,
             name: "بنطلون جينز كلاسيك - مقاس مثالي",
+            nameEn: "Classic Jeans Pants - Perfect Fit",
             price: 756, oldPrice: 1050, discount: "28%",
             category: "بنطلونات", rating: 4.3, reviews: 89,
             sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+            colors: [
+                { name: "أزرق غامق", nameEn: "Dark Blue", hex: "#1e3a8a" },
+                { name: "أسود", nameEn: "Black", hex: "#000000" },
+                { name: "أزرق فاتح", nameEn: "Light Blue", hex: "#60a5fa" }
+            ],
             image: "https://j.top4top.io/p_3832lszls1.jpg",
             freeShipping: false,
             description: "بنطلون جينز كلاسيكي بقصة مريحة، مصنوع من قماش الدنيم عالي الجودة.",
-            brand: "Aviro", material: "دنيم 98% + إيلاستين 2%", warranty: "ضمان لمدة 30 يوم"
+            descriptionEn: "Classic jeans pants with a comfortable fit, made of high-quality denim fabric.",
+            brand: "Aviro", material: "دنيم 98% + إيلاستين 2%", materialEn: "98% Denim + 2% Elastane", warranty: "ضمان لمدة 30 يوم", warrantyEn: "30 Days Warranty"
         }];
 
         // ============================================================
@@ -1412,17 +1590,257 @@
         let autoRotateIntervals = {};
         let currentImageIndex = {};
         let selectedSizes = {};
+        let selectedColors = {};
         let isDragging = false;
         let dragStartX = 0;
         let currentCategory = 'all';
         let currentDetailProductId = null;
         let detailSelectedSize = null;
+        let detailSelectedColor = null;
+
         let pendingCheckout = false;
 
-        // متغيرات الدفع
         let selectedPaymentMethod = null;
         let receiptFile = null;
         let receiptFileName = '';
+
+        // ============================================================
+        // 4.1 نظام الترجمة الشامل (i18n)
+        // ============================================================
+        let currentLang = localStorage.getItem('aviroLang') || 'ar';
+
+        const translations = {
+            ar: {
+                guest: "زائر", login: "🔐 دخول", myAccount: "👤 حسابي", logout: "🚪 خروج",
+                searchPlaceholder: "ابحث عن أي منتج...",
+                heroTitle: "أهلاً بك في <span>Aviro</span>", heroSubtitle: "🛍️ أفضل العروض والمنتجات بأفضل الأسعار",
+                ourProductsTitle: "🛍️ <span>منتجاتنا</span>", loadingProducts: "جاري تحميل المنتجات...",
+                cartTitle: "🛒 <span>عربة</span> التسوق", cartEmpty: "لا توجد منتجات في العربة",
+                totalLabel: "الإجمالي", currencyLabel: "ج.م", checkoutBtn: "إتمام الشراء ✅", clearCartBtn: "🗑️ تفريغ العربة",
+                catAll: "الكل", catTracksuits: "👕 ترنجات", catShorts: "🩳 اشرات", catPants: "👖 بنطلونات", catSocks: "🧦 شربات",
+                noProducts: "لا توجد منتجات", trySearch: "حاول تغيير كلمة البحث أو التصنيف",
+                addToCart: "🛒 إضافة إلى العربة", freeShipping: "🚚 توصيل مجاني",
+                chooseColor: "🎨 اختر اللون:", chooseSize: "📏 اختر المقاس:",
+                backToStore: "← العودة إلى المتجر",
+                descriptionLabel: "📝 الوصف:", brandLabel: "🏷️ العلامة التجارية:", materialLabel: "🧵 المادة:",
+                warrantyLabel: "✅ الضمان:", deliveryLabel: "📦 التوصيل:",
+                freeLabel: "مجاني", calculatedAtCheckout: "يتم حسابه عند الشراء",
+                reviewsLabel: "تقييم", discountLabel: "خصم",
+                productDetailsTitle: "📦 <span>تفاصيل</span> المنتج",
+                emailPlaceholder: "✉️ البريد الإلكتروني", passwordPlaceholder: "🔑 كلمة المرور",
+                loginBtn: "دخول 🚀", forgotPassword: "🔑 نسيت كلمة المرور؟",
+                noAccount: "ليس لديك حساب؟", registerNow: "سجل الآن",
+                googleLoginBtn: "تسجيل الدخول بـ Google", orText: "أو",
+                registerTitle: "📝 إنشاء حساب", registerSubtitle: "سجل الآن للاستمتاع بتجربة التسوق",
+                googleRegisterBtn: "التسجيل بـ Google", passwordMin6: "🔑 كلمة المرور (6 أحرف على الأقل)",
+                confirmPassword: "🔑 تأكيد كلمة المرور", createAccountBtn: "إنشاء حساب ✨",
+                haveAccount: "لديك حساب بالفعل؟", loginNow: "تسجيل الدخول",
+                resetTitle: "🔑 إعادة تعيين", resetSubtitle: "اختر إحدى الطرق التالية",
+                sendResetLink: "📧 إرسال رابط إعادة التعيين", orDivider: "━━━━━━━━━ أو ━━━━━━━━━",
+                manualResetTitle: "🔧 تغيير كلمة المرور يدوياً",
+                currentPassword: "🔑 كلمة المرور الحالية",
+                newPasswordMin6: "🔑 كلمة المرور الجديدة (6 أحرف)",
+                confirmNewPassword: "🔑 تأكيد كلمة المرور الجديدة",
+                changePasswordBtn: "🔄 تغيير كلمة المرور", rememberPassword: "تذكرت كلمة المرور؟",
+                privacyTitle: "🔒 <span>سياسة</span> الخصوصية", privacyHeading: "سياسة الخصوصية",
+                privacyP1: "يلتزم متجر Aviro بحماية بيانات جميع المستخدمين، وعدم مشاركة البيانات مع أي جهة إلا بما يسمح به القانون.",
+                privacyP2: "جميع بيانات الدفع يتم تشفيرها باستخدام تقنيات آمنة.",
+                privacyP3: "يمكنك طلب حذف بياناتك في أي وقت عبر التواصل معنا.",
+                completeProfileTitle: "👤 <span>أكمل</span> بياناتك",
+                profileIntro: "✨ يرجى إدخال بياناتك لإتمام تجربة التسوق",
+                firstNamePlaceholder: "👤 الاسم الأول", lastNamePlaceholder: "👤 الاسم الأخير",
+                phonePlaceholder: "📱 رقم التلفون (مثال: 01012345678)",
+                governorateFirst: "🏛️ اختر المحافظة",
+                addressPlaceholder: "📍 العنوان بالتفصيل (الشارع - المنطقة - علامة مميزة)",
+                saveProfileBtn: "💾 حفظ البيانات ومتابعة التسوق",
+                paymentTitle: "💳 <span>بيانات</span> الدفع", shippingTitle: "📦 <span>بيانات</span> الشحن",
+                paymentStep: "الدفع", shippingStep: "الشحن",
+                choosePaymentLabel: "💳 اختر طريقة الدفع:",
+                cashPaymentLabel: "الدفع عند الاستلام", onlinePaymentLabel: "الدفع أونلاين (إنستاباي)",
+                instapayTitle: "📱 قم بتحويل المبلغ إلى رقم إنستاباي:",
+                copyBtn: "📋 نسخ", instapayHint: "⚠️ بعد التحويل، ارفع صورة إيصال التحويل أدناه",
+                uploadReceiptText: "اضغط لرفع صورة إيصال التحويل",
+                nextToShippingBtn: "التالي: بيانات الشحن ←",
+                backToPaymentBtn: "→ العودة لبيانات الدفع",
+                confirmOrderBtn: "📧 تأكيد وإرسال الطلب",
+                shippingDataLabel: "📍 بيانات الشحن:",
+                firstNameShort: "الاسم الأول", lastNameShort: "الاسم الأخير", phoneShort: "رقم الهاتف",
+                governorateFirstCheckout: "-- اختر المحافظة --",
+                addressShort: "العنوان بالتفصيل", emailShort: "البريد الإلكتروني",
+                governorateLabel: "🏛️ اختر المحافظة:",
+                aboutTitle: "📖 <span>من نحن</span>", aboutTagline: "متجرك الأول للملابس والترنجات في مصر",
+                ourVision: "🌟 رؤيتنا", visionText: "في <strong style=\"color: #ff9900;\">Aviro Store</strong>، نسعى لنكون الوجهة الأولى للتسوق الإلكتروني في مصر.",
+                ourMission: "💪 رسالتنا", missionText: "نهدف إلى توفير منتجات عالية الجودة في مجال الملابس والترنجات.",
+                contactHeading: "📞 تواصل معنا", emailLabel: "📧 البريد:", whatsappLabel: "📱 واتساب:",
+                footerCopyright: "© 2026 <strong style=\"color: #ff9900;\">Aviro Store</strong> – شكراً لثقتكم بنا 🙏",
+                footerAbout: "أفضل متجر إلكتروني في مصر<br>نقدم لكم أفضل المنتجات بأفضل الأسعار",
+                footerQuickLinks: "روابط سريعة", footerProducts: "المنتجات", footerPrivacy: "سياسة الخصوصية",
+                footerAboutLink: "من نحن", footerContact: "التواصل معنا",
+                footerInfo: "معلومات", footerShipping: "الشحن والتوصيل", footerReturns: "الإرجاع والاستبدال",
+                footerContactTitle: "📞 تواصل معنا", footerEmail: "البريد الإلكتروني",
+                footerWhatsapp: "واتساب", footerFacebook: "فيسبوك",
+                footerBottom: "© 2026 <span style=\"color:#ff9900;\">Aviro Store</span>. جميع الحقوق محفوظة",
+                sizeRequired: "⚠️ يرجى اختيار المقاس", colorRequired: "⚠️ يرجى اختيار اللون",
+                addedToCart: "✅ تم الإضافة إلى العربة!", cartEmptyAlert: "⚠️ عربتك فارغة!",
+                clearCartConfirm: "هل أنت متأكد من تفريغ العربة بالكامل؟",
+                logoutConfirm: "هل تريد تسجيل الخروج؟",
+                loginRequired: "🔐 يرجى تسجيل الدخول أولاً",
+                profileRequired: "⚠️ يرجى إكمال بياناتك أولاً (بما فيها المحافظة)",
+                langSwitched: "✅ تم التبديل إلى العربية",
+                logoutSuccess: "👋 تم تسجيل الخروج",
+                cartCleared: "🗑️ تم تفريغ العربة",
+                loginSubtitleDefault: "🔐 تسجيل الدخول للوصول إلى حسابك",
+                loginSubtitleCheckout: "🔐 يرجى تسجيل الدخول لإتمام طلبك"
+            },
+            en: {
+                guest: "Guest", login: "🔐 Login", myAccount: "👤 My Account", logout: "🚪 Logout",
+                searchPlaceholder: "Search for any product...",
+                heroTitle: "Welcome to <span>Aviro</span>", heroSubtitle: "🛍️ Best offers and products at best prices",
+                ourProductsTitle: "🛍️ <span>Our Products</span>", loadingProducts: "Loading products...",
+                cartTitle: "🛒 <span>Shopping</span> Cart", cartEmpty: "No products in cart",
+                totalLabel: "Total", currencyLabel: "EGP", checkoutBtn: "Checkout ✅", clearCartBtn: "🗑️ Clear Cart",
+                catAll: "All", catTracksuits: "👕 Tracksuits", catShorts: "🩳 Shorts", catPants: "👖 Pants", catSocks: "🧦 Socks",
+                noProducts: "No products found", trySearch: "Try changing the search or category",
+                addToCart: "🛒 Add to Cart", freeShipping: "🚚 Free Shipping",
+                chooseColor: "🎨 Choose Color:", chooseSize: "📏 Choose Size:",
+                backToStore: "← Back to Store",
+                descriptionLabel: "📝 Description:", brandLabel: "🏷️ Brand:", materialLabel: "🧵 Material:",
+                warrantyLabel: "✅ Warranty:", deliveryLabel: "📦 Delivery:",
+                freeLabel: "Free", calculatedAtCheckout: "Calculated at checkout",
+                reviewsLabel: "reviews", discountLabel: "OFF",
+                productDetailsTitle: "📦 <span>Product</span> Details",
+                emailPlaceholder: "✉️ Email Address", passwordPlaceholder: "🔑 Password",
+                loginBtn: "Login 🚀", forgotPassword: "🔑 Forgot Password?",
+                noAccount: "Don't have an account?", registerNow: "Register Now",
+                googleLoginBtn: "Login with Google", orText: "Or",
+                registerTitle: "📝 Create Account", registerSubtitle: "Register now to enjoy shopping",
+                googleRegisterBtn: "Register with Google", passwordMin6: "🔑 Password (at least 6 chars)",
+                confirmPassword: "🔑 Confirm Password", createAccountBtn: "Create Account ✨",
+                haveAccount: "Already have an account?", loginNow: "Login",
+                resetTitle: "🔑 Reset Password", resetSubtitle: "Choose one of the following methods",
+                sendResetLink: "📧 Send Reset Link", orDivider: "━━━━━━━━━ Or ━━━━━━━━━",
+                manualResetTitle: "🔧 Change Password Manually",
+                currentPassword: "🔑 Current Password",
+                newPasswordMin6: "🔑 New Password (6 chars)",
+                confirmNewPassword: "🔑 Confirm New Password",
+                changePasswordBtn: "🔄 Change Password", rememberPassword: "Remembered your password?",
+                privacyTitle: "🔒 <span>Privacy</span> Policy", privacyHeading: "Privacy Policy",
+                privacyP1: "Aviro Store is committed to protecting all users' data and will not share it with any party except as permitted by law.",
+                privacyP2: "All payment data is encrypted using secure technologies.",
+                privacyP3: "You can request deletion of your data at any time by contacting us.",
+                completeProfileTitle: "👤 <span>Complete</span> Your Data",
+                profileIntro: "✨ Please enter your data to complete shopping",
+                firstNamePlaceholder: "👤 First Name", lastNamePlaceholder: "👤 Last Name",
+                phonePlaceholder: "📱 Phone (e.g., 01012345678)",
+                governorateFirst: "🏛️ Choose Governorate",
+                addressPlaceholder: "📍 Detailed Address (Street - Area - Landmark)",
+                saveProfileBtn: "💾 Save Data & Continue",
+                paymentTitle: "💳 <span>Payment</span> Data", shippingTitle: "📦 <span>Shipping</span> Data",
+                paymentStep: "Payment", shippingStep: "Shipping",
+                choosePaymentLabel: "💳 Choose payment method:",
+                cashPaymentLabel: "Cash on Delivery", onlinePaymentLabel: "Online Payment (InstaPay)",
+                instapayTitle: "📱 Transfer the amount to this InstaPay number:",
+                copyBtn: "📋 Copy", instapayHint: "⚠️ After transfer, upload the receipt below",
+                uploadReceiptText: "Click to upload transfer receipt",
+                nextToShippingBtn: "Next: Shipping Data →",
+                backToPaymentBtn: "← Back to Payment",
+                confirmOrderBtn: "📧 Confirm & Send Order",
+                shippingDataLabel: "📍 Shipping Data:",
+                firstNameShort: "First Name", lastNameShort: "Last Name", phoneShort: "Phone Number",
+                governorateFirstCheckout: "-- Choose Governorate --",
+                addressShort: "Detailed Address", emailShort: "Email",
+                governorateLabel: "🏛️ Choose Governorate:",
+                aboutTitle: "📖 <span>About</span> Us", aboutTagline: "Your first store for clothes and tracksuits in Egypt",
+                ourVision: "🌟 Our Vision", visionText: "At <strong style=\"color: #ff9900;\">Aviro Store</strong>, we strive to be the first destination for online shopping in Egypt.",
+                ourMission: "💪 Our Mission", missionText: "We aim to provide high-quality products in the field of clothes and tracksuits.",
+                contactHeading: "📞 Contact Us", emailLabel: "📧 Email:", whatsappLabel: "📱 WhatsApp:",
+                footerCopyright: "© 2026 <strong style=\"color: #ff9900;\">Aviro Store</strong> – Thank you for your trust 🙏",
+                footerAbout: "Best online store in Egypt<br>We offer you the best products at the best prices",
+                footerQuickLinks: "Quick Links", footerProducts: "Products", footerPrivacy: "Privacy Policy",
+                footerAboutLink: "About Us", footerContact: "Contact Us",
+                footerInfo: "Information", footerShipping: "Shipping & Delivery", footerReturns: "Returns & Exchange",
+                footerContactTitle: "📞 Contact Us", footerEmail: "Email",
+                footerWhatsapp: "WhatsApp", footerFacebook: "Facebook",
+                footerBottom: "© 2026 <span style=\"color:#ff9900;\">Aviro Store</span>. All Rights Reserved",
+                sizeRequired: "⚠️ Please choose a size", colorRequired: "⚠️ Please choose a color",
+                addedToCart: "✅ Added to cart!", cartEmptyAlert: "⚠️ Your cart is empty!",
+                clearCartConfirm: "Are you sure you want to clear the cart?",
+                logoutConfirm: "Do you want to logout?",
+                loginRequired: "🔐 Please login first",
+                profileRequired: "⚠️ Please complete your profile first (including governorate)",
+                langSwitched: "✅ Switched to English",
+                logoutSuccess: "👋 Logged out",
+                cartCleared: "🗑️ Cart cleared",
+                loginSubtitleDefault: "🔐 Login to access your account",
+                loginSubtitleCheckout: "🔐 Please login to complete your order"
+            }
+        };
+
+        function t(key) {
+            return (translations[currentLang] && translations[currentLang][key]) || key;
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            localStorage.setItem('aviroLang', currentLang);
+            applyLanguage(currentLang);
+            showNotification(t('langSwitched'), 'success');
+        }
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+            document.title = lang === 'ar' ? 'Aviro Store | متجر Aviro' : 'Aviro Store | Online Store';
+
+            const langLabel = document.getElementById('langLabel');
+            if (langLabel) langLabel.textContent = lang === 'ar' ? 'EN' : 'ع';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-select]').forEach(el => {
+                const key = el.getAttribute('data-i18n-select');
+                if (translations[lang] && translations[lang][key] && el.options[0]) {
+                    el.options[0].textContent = translations[lang][key];
+                }
+            });
+
+            const userEmailEl = document.getElementById('userEmailDisplay');
+            if (userEmailEl && !auth.currentUser) userEmailEl.textContent = t('guest');
+
+            const isShipping = document.getElementById('shippingStep')?.style.display !== 'none';
+            const checkoutTitle = document.getElementById('checkoutModalTitle');
+            if (checkoutTitle) {
+                checkoutTitle.innerHTML = isShipping ? t('shippingTitle') : t('paymentTitle');
+            }
+
+            const confirmBtn = document.getElementById('contactSubmitBtn');
+            if (confirmBtn && !confirmBtn.disabled) confirmBtn.textContent = t('confirmOrderBtn');
+
+            const filtered = currentCategory === 'all' ? allProducts : allProducts.filter(p => p.category === currentCategory);
+            displayProducts(filtered);
+            renderCart();
+        }
 
         // ============================================================
         // 5. دوال المصادقة
@@ -1435,7 +1853,7 @@
             const loginBtn = document.getElementById('loginBtn');
 
             if (!email || !password) {
-                errorEl.textContent = '⚠️ يرجى إدخال البريد الإلكتروني وكلمة المرور';
+                errorEl.textContent = currentLang === 'ar' ? '⚠️ يرجى إدخال البريد الإلكتروني وكلمة المرور' : '⚠️ Please enter email and password';
                 errorEl.classList.add('show');
                 return;
             }
@@ -1443,26 +1861,26 @@
             errorEl.classList.remove('show');
             successEl.classList.remove('show');
             loginBtn.disabled = true;
-            loginBtn.innerHTML = 'جاري تسجيل الدخول... ⏳';
+            loginBtn.innerHTML = currentLang === 'ar' ? 'جاري تسجيل الدخول... ⏳' : 'Logging in... ⏳';
 
             auth.signInWithEmailAndPassword(email, password)
                 .then(() => {
-                    successEl.textContent = '✅ تم تسجيل الدخول بنجاح!';
+                    successEl.textContent = currentLang === 'ar' ? '✅ تم تسجيل الدخول بنجاح!' : '✅ Logged in successfully!';
                     successEl.classList.add('show');
                     setTimeout(() => closeLogin(), 800);
                 })
                 .catch((error) => {
-                    let errorMessage = '⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة';
-                    if (error.code === 'auth/user-not-found') errorMessage = '⚠️ لا يوجد حساب بهذا البريد الإلكتروني';
-                    else if (error.code === 'auth/wrong-password') errorMessage = '⚠️ كلمة المرور غير صحيحة';
-                    else if (error.code === 'auth/invalid-email') errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
-                    else if (error.code === 'auth/too-many-requests') errorMessage = '⚠️ تم حظر الحساب مؤقتاً. حاول لاحقاً';
+                    let errorMessage = currentLang === 'ar' ? '⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة' : '⚠️ Invalid email or password';
+                    if (error.code === 'auth/user-not-found') errorMessage = currentLang === 'ar' ? '⚠️ لا يوجد حساب بهذا البريد الإلكتروني' : '⚠️ No account with this email';
+                    else if (error.code === 'auth/wrong-password') errorMessage = currentLang === 'ar' ? '⚠️ كلمة المرور غير صحيحة' : '⚠️ Wrong password';
+                    else if (error.code === 'auth/invalid-email') errorMessage = currentLang === 'ar' ? '⚠️ البريد الإلكتروني غير صحيح' : '⚠️ Invalid email';
+                    else if (error.code === 'auth/too-many-requests') errorMessage = currentLang === 'ar' ? '⚠️ تم حظر الحساب مؤقتاً. حاول لاحقاً' : '⚠️ Account temporarily blocked. Try later';
                     errorEl.textContent = errorMessage;
                     errorEl.classList.add('show');
                 })
                 .finally(() => {
                     loginBtn.disabled = false;
-                    loginBtn.innerHTML = 'دخول 🚀';
+                    loginBtn.innerHTML = t('loginBtn');
                 });
         }
 
@@ -1481,7 +1899,7 @@
                 .then((result) => {
                     console.log('✅ Google login success:', result.user.email);
                     if (successEl) {
-                        successEl.textContent = '✅ تم تسجيل الدخول بنجاح!';
+                        successEl.textContent = currentLang === 'ar' ? '✅ تم تسجيل الدخول بنجاح!' : '✅ Logged in successfully!';
                         successEl.classList.add('show');
                     }
                     setTimeout(() => {
@@ -1490,17 +1908,17 @@
                     }, 600);
                 })
                 .catch((error) => {
-                    let msg = '⚠️ فشل تسجيل الدخول بـ Google';
+                    let msg = currentLang === 'ar' ? '⚠️ فشل تسجيل الدخول بـ Google' : '⚠️ Google login failed';
                     if (error.code === 'auth/popup-blocked') {
-                        msg = '⚠️ تم حظر النافذة المنبثقة. يرجى السماح بها لهذا الموقع.';
+                        msg = currentLang === 'ar' ? '⚠️ تم حظر النافذة المنبثقة. يرجى السماح بها لهذا الموقع.' : '⚠️ Popup blocked. Please allow it for this site.';
                     } else if (error.code === 'auth/popup-closed-by-user') {
-                        msg = '⚠️ تم إغلاق النافذة قبل إتمام تسجيل الدخول.';
+                        msg = currentLang === 'ar' ? '⚠️ تم إغلاق النافذة قبل إتمام تسجيل الدخول.' : '⚠️ Window closed before login completed.';
                     } else if (error.code === 'auth/cancelled-popup-request') {
-                        msg = '⚠️ تم إلغاء العملية. حاول مرة أخرى.';
+                        msg = currentLang === 'ar' ? '⚠️ تم إلغاء العملية. حاول مرة أخرى.' : '⚠️ Request cancelled. Try again.';
                     } else if (error.code === 'auth/network-request-failed') {
-                        msg = '⚠️ فشل الاتصال. تحقق من الإنترنت.';
+                        msg = currentLang === 'ar' ? '⚠️ فشل الاتصال. تحقق من الإنترنت.' : '⚠️ Connection failed. Check internet.';
                     } else if (error.code === 'auth/unauthorized-domain') {
-                        msg = '⚠️ النطاق غير مصرح به في Firebase Console.';
+                        msg = currentLang === 'ar' ? '⚠️ النطاق غير مصرح به في Firebase Console.' : '⚠️ Domain not authorized in Firebase Console.';
                     }
                     if (errorEl) {
                         errorEl.textContent = msg;
@@ -1526,43 +1944,43 @@
             successEl.classList.remove('show');
 
             if (!email || !password || !confirmPassword) {
-                errorEl.textContent = '⚠️ يرجى ملء جميع الحقول';
+                errorEl.textContent = currentLang === 'ar' ? '⚠️ يرجى ملء جميع الحقول' : '⚠️ Please fill all fields';
                 errorEl.classList.add('show');
                 return;
             }
             if (password.length < 6) {
-                errorEl.textContent = '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                errorEl.textContent = currentLang === 'ar' ? '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل' : '⚠️ Password must be at least 6 characters';
                 errorEl.classList.add('show');
                 return;
             }
             if (password !== confirmPassword) {
-                errorEl.textContent = '⚠️ كلمة المرور غير متطابقة';
+                errorEl.textContent = currentLang === 'ar' ? '⚠️ كلمة المرور غير متطابقة' : '⚠️ Passwords do not match';
                 errorEl.classList.add('show');
                 return;
             }
 
             registerBtn.disabled = true;
-            registerBtn.innerHTML = 'جاري إنشاء الحساب... ⏳';
+            registerBtn.innerHTML = currentLang === 'ar' ? 'جاري إنشاء الحساب... ⏳' : 'Creating account... ⏳';
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
-                    successEl.textContent = '✅ تم إنشاء الحساب بنجاح! جاري تحويلك...';
+                    successEl.textContent = currentLang === 'ar' ? '✅ تم إنشاء الحساب بنجاح! جاري تحويلك...' : '✅ Account created successfully! Redirecting...';
                     successEl.classList.add('show');
                     setTimeout(() => {
                         closeRegister();
                     }, 1500);
                 })
                 .catch((error) => {
-                    let errorMessage = '⚠️ حدث خطأ أثناء إنشاء الحساب';
-                    if (error.code === 'auth/email-already-in-use') errorMessage = '⚠️ هذا البريد الإلكتروني مستخدم بالفعل';
-                    else if (error.code === 'auth/invalid-email') errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
-                    else if (error.code === 'auth/weak-password') errorMessage = '⚠️ كلمة المرور ضعيفة. استخدم 6 أحرف على الأقل';
+                    let errorMessage = currentLang === 'ar' ? '⚠️ حدث خطأ أثناء إنشاء الحساب' : '⚠️ Error creating account';
+                    if (error.code === 'auth/email-already-in-use') errorMessage = currentLang === 'ar' ? '⚠️ هذا البريد الإلكتروني مستخدم بالفعل' : '⚠️ Email already in use';
+                    else if (error.code === 'auth/invalid-email') errorMessage = currentLang === 'ar' ? '⚠️ البريد الإلكتروني غير صحيح' : '⚠️ Invalid email';
+                    else if (error.code === 'auth/weak-password') errorMessage = currentLang === 'ar' ? '⚠️ كلمة المرور ضعيفة. استخدم 6 أحرف على الأقل' : '⚠️ Weak password. Use at least 6 characters';
                     errorEl.textContent = errorMessage;
                     errorEl.classList.add('show');
                 })
                 .finally(() => {
                     registerBtn.disabled = false;
-                    registerBtn.innerHTML = 'إنشاء حساب ✨';
+                    registerBtn.innerHTML = t('createAccountBtn');
                 });
         }
 
@@ -1576,30 +1994,30 @@
             successEl.classList.remove('show');
 
             if (!email) {
-                errorEl.textContent = '⚠️ يرجى إدخال البريد الإلكتروني';
+                errorEl.textContent = currentLang === 'ar' ? '⚠️ يرجى إدخال البريد الإلكتروني' : '⚠️ Please enter email';
                 errorEl.classList.add('show');
                 return;
             }
 
             resetBtn.disabled = true;
-            resetBtn.innerHTML = 'جاري الإرسال... ⏳';
+            resetBtn.innerHTML = currentLang === 'ar' ? 'جاري الإرسال... ⏳' : 'Sending... ⏳';
 
             auth.sendPasswordResetEmail(email)
                 .then(() => {
-                    successEl.textContent = '✅ تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني';
+                    successEl.textContent = currentLang === 'ar' ? '✅ تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني' : '✅ Reset link sent to your email';
                     successEl.classList.add('show');
-                    showNotification('📧 تم إرسال الرابط إلى بريدك');
+                    showNotification(currentLang === 'ar' ? '📧 تم إرسال الرابط إلى بريدك' : '📧 Link sent to your email');
                 })
                 .catch((error) => {
-                    let errorMessage = '⚠️ حدث خطأ أثناء إرسال رابط إعادة التعيين';
-                    if (error.code === 'auth/user-not-found') errorMessage = '⚠️ لا يوجد حساب بهذا البريد الإلكتروني';
-                    else if (error.code === 'auth/invalid-email') errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
+                    let errorMessage = currentLang === 'ar' ? '⚠️ حدث خطأ أثناء إرسال رابط إعادة التعيين' : '⚠️ Error sending reset link';
+                    if (error.code === 'auth/user-not-found') errorMessage = currentLang === 'ar' ? '⚠️ لا يوجد حساب بهذا البريد الإلكتروني' : '⚠️ No account with this email';
+                    else if (error.code === 'auth/invalid-email') errorMessage = currentLang === 'ar' ? '⚠️ البريد الإلكتروني غير صحيح' : '⚠️ Invalid email';
                     errorEl.textContent = errorMessage;
                     errorEl.classList.add('show');
                 })
                 .finally(() => {
                     resetBtn.disabled = false;
-                    resetBtn.innerHTML = '📧 إرسال رابط إعادة التعيين';
+                    resetBtn.innerHTML = t('sendResetLink');
                 });
         }
 
@@ -1616,52 +2034,52 @@
 
             if (!email || !oldPassword || !newPassword || !confirmPassword) {
                 resultDiv.className = 'reset-result error';
-                resultDiv.textContent = '⚠️ يرجى ملء جميع الحقول';
+                resultDiv.textContent = currentLang === 'ar' ? '⚠️ يرجى ملء جميع الحقول' : '⚠️ Please fill all fields';
                 return;
             }
             if (newPassword.length < 6) {
                 resultDiv.className = 'reset-result error';
-                resultDiv.textContent = '⚠️ كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل';
+                resultDiv.textContent = currentLang === 'ar' ? '⚠️ كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل' : '⚠️ New password must be at least 6 characters';
                 return;
             }
             if (newPassword !== confirmPassword) {
                 resultDiv.className = 'reset-result error';
-                resultDiv.textContent = '⚠️ كلمة المرور الجديدة غير متطابقة';
+                resultDiv.textContent = currentLang === 'ar' ? '⚠️ كلمة المرور الجديدة غير متطابقة' : '⚠️ New passwords do not match';
                 return;
             }
 
             btn.disabled = true;
-            btn.textContent = 'جاري التغيير... ⏳';
+            btn.textContent = currentLang === 'ar' ? 'جاري التغيير... ⏳' : 'Changing... ⏳';
 
             auth.signInWithEmailAndPassword(email, oldPassword)
                 .then((userCredential) => userCredential.user.updatePassword(newPassword))
                 .then(() => {
                     resultDiv.className = 'reset-result success';
-                    resultDiv.innerHTML = `✅ تم تغيير كلمة المرور بنجاح!`;
-                    showNotification('✅ تم تغيير كلمة المرور بنجاح!');
+                    resultDiv.innerHTML = currentLang === 'ar' ? '✅ تم تغيير كلمة المرور بنجاح!' : '✅ Password changed successfully!';
+                    showNotification(currentLang === 'ar' ? '✅ تم تغيير كلمة المرور بنجاح!' : '✅ Password changed successfully!');
                     setTimeout(() => {
                         showLogin();
                         resultDiv.style.display = 'none';
                     }, 4000);
                 })
                 .catch((error) => {
-                    let errorMessage = '⚠️ فشل تغيير كلمة المرور';
-                    if (error.code === 'auth/wrong-password') errorMessage = '⚠️ كلمة المرور الحالية غير صحيحة';
-                    else if (error.code === 'auth/user-not-found') errorMessage = '⚠️ لا يوجد حساب بهذا البريد الإلكتروني';
+                    let errorMessage = currentLang === 'ar' ? '⚠️ فشل تغيير كلمة المرور' : '⚠️ Failed to change password';
+                    if (error.code === 'auth/wrong-password') errorMessage = currentLang === 'ar' ? '⚠️ كلمة المرور الحالية غير صحيحة' : '⚠️ Current password is wrong';
+                    else if (error.code === 'auth/user-not-found') errorMessage = currentLang === 'ar' ? '⚠️ لا يوجد حساب بهذا البريد الإلكتروني' : '⚠️ No account with this email';
                     resultDiv.className = 'reset-result error';
                     resultDiv.textContent = errorMessage;
                 })
                 .finally(() => {
                     btn.disabled = false;
-                    btn.textContent = '🔄 تغيير كلمة المرور';
+                    btn.textContent = t('changePasswordBtn');
                 });
         }
 
         function handleLogout() {
-            if (confirm('هل تريد تسجيل الخروج؟')) {
+            if (confirm(t('logoutConfirm'))) {
                 auth.signOut()
                     .then(() => {
-                        showNotification('👋 تم تسجيل الخروج');
+                        showNotification(t('logoutSuccess'));
                     })
                     .catch((error) => {
                         console.error('❌ Logout error:', error);
@@ -1690,14 +2108,14 @@
 
                 const profile = JSON.parse(localStorage.getItem('userProfile_' + user.uid)) || {};
 
-                if (!profile.firstName || !profile.lastName || !profile.phone || !profile.address) {
+                if (!profile.firstName || !profile.lastName || !profile.phone || !profile.governorate || !profile.address) {
                     setTimeout(() => openProfileModal(user), 400);
                 } else if (pendingCheckout) {
                     pendingCheckout = false;
                     setTimeout(() => checkout(), 300);
                 }
             } else {
-                if (userEmailDisplay) userEmailDisplay.textContent = 'زائر';
+                if (userEmailDisplay) userEmailDisplay.textContent = t('guest');
                 if (logoutBtn) logoutBtn.style.display = 'none';
                 if (headerLoginBtn) headerLoginBtn.style.display = 'flex';
                 if (accountBtn) accountBtn.style.display = 'none';
@@ -1716,7 +2134,7 @@
             document.getElementById('loginScreen').classList.add('show');
             document.getElementById('loginError').classList.remove('show');
             document.getElementById('loginSuccess').classList.remove('show');
-            document.getElementById('loginSubtitle').textContent = '🔐 تسجيل الدخول للوصول إلى حسابك';
+            document.getElementById('loginSubtitle').textContent = t('loginSubtitleDefault');
         }
 
         function showRegister() {
@@ -1764,6 +2182,7 @@
             document.getElementById('profileFirstName').value = firstName;
             document.getElementById('profileLastName').value = lastName;
             document.getElementById('profilePhone').value = profile.phone || '';
+            document.getElementById('profileGovernorate').value = profile.governorate || '';
             document.getElementById('profileAddress').value = profile.address || '';
             document.getElementById('profileError').style.display = 'none';
 
@@ -1781,36 +2200,37 @@
 
             const user = auth.currentUser;
             if (!user) {
-                showNotification('⚠️ يرجى تسجيل الدخول أولاً', 'error');
+                showNotification(t('loginRequired'), 'error');
                 return;
             }
 
             const firstName = document.getElementById('profileFirstName').value.trim();
             const lastName = document.getElementById('profileLastName').value.trim();
             const phone = document.getElementById('profilePhone').value.trim();
+            const governorate = document.getElementById('profileGovernorate').value.trim();
             const address = document.getElementById('profileAddress').value.trim();
             const errorEl = document.getElementById('profileError');
 
-            if (!firstName || !lastName || !phone || !address) {
-                errorEl.textContent = '⚠️ يرجى ملء جميع الحقول';
+            if (!firstName || !lastName || !phone || !governorate || !address) {
+                errorEl.textContent = currentLang === 'ar' ? '⚠️ يرجى ملء جميع الحقول بما فيها المحافظة' : '⚠️ Please fill all fields including governorate';
                 errorEl.style.display = 'block';
                 return;
             }
 
             if (phone.length < 10) {
-                errorEl.textContent = '⚠️ رقم التلفون غير صحيح';
+                errorEl.textContent = currentLang === 'ar' ? '⚠️ رقم التلفون غير صحيح' : '⚠️ Invalid phone number';
                 errorEl.style.display = 'block';
                 return;
             }
 
-            const profile = { firstName, lastName, phone, address };
+            const profile = { firstName, lastName, phone, governorate, address };
             localStorage.setItem('userProfile_' + user.uid, JSON.stringify(profile));
 
             if (!user.displayName) {
                 user.updateProfile({ displayName: `${firstName} ${lastName}` }).catch(() => {});
             }
 
-            showNotification('✅ تم حفظ بياناتك بنجاح!', 'success');
+            showNotification(currentLang === 'ar' ? '✅ تم حفظ بياناتك بنجاح!' : '✅ Profile saved successfully!', 'success');
             closeProfileModal();
 
             if (pendingCheckout) {
@@ -1829,6 +2249,92 @@
 
         function closeAboutModal() {
             document.getElementById('aboutModal').classList.remove('open');
+        }
+
+        // ============================================================
+        // 9.1 مودال الطلبات + رفع الإيصال إلى Storage (جديد)
+        // ============================================================
+        function openOrdersPanel() {
+            document.getElementById('ordersModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            loadOrders();
+        }
+
+        function closeOrdersPanel() {
+            document.getElementById('ordersModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function loadOrders() {
+            const body = document.getElementById('ordersBody');
+            body.innerHTML = '<p style="text-align:center;color:#888;">⏳ جاري التحميل...</p>';
+
+            db.collection('orders').orderBy('createdAt', 'desc').limit(50).get()
+                .then(snap => {
+                    if (snap.empty) {
+                        body.innerHTML = '<p style="text-align:center;color:#888; padding:30px;">لا توجد طلبات بعد 📭</p>';
+                        return;
+                    }
+                    let html = '';
+                    snap.forEach(doc => {
+                        const o = doc.data();
+                        const date = o.createdAt && o.createdAt.toDate
+                            ? o.createdAt.toDate().toLocaleString('ar-EG')
+                            : 'غير محدد';
+
+                        let receiptHTML = '';
+                        if (o.receiptUrl) {
+                            const isImg = /\.(jpg|jpeg|png|webp|gif)/i.test(o.receiptUrl) || (o.receiptUrl.includes('firebasestorage') && !o.receiptUrl.toLowerCase().includes('.pdf'));
+                            receiptHTML = `
+                                <div style="margin-top:10px; padding:10px; background:#f0fdf4; border-radius:10px; border-right:4px solid #22c55e;">
+                                    <strong style="color:#166534; font-size:13px;">📸 إيصال التحويل:</strong><br>
+                                    <a href="${o.receiptUrl}" target="_blank" rel="noopener noreferrer"
+                                       style="display:inline-block; margin-top:6px; color:#2563eb; text-decoration:underline; word-break:break-all; font-size:13px; font-weight:600;">
+                                       🔗 اضغط هنا لعرض الصورة
+                                    </a>
+                                    ${isImg ? `<br><a href="${o.receiptUrl}" target="_blank" rel="noopener noreferrer">
+                                        <img src="${o.receiptUrl}" alt="إيصال" style="max-width:140px; max-height:140px; margin-top:8px; border-radius:8px; border:2px solid #e5e7eb; object-fit:cover;">
+                                    </a>` : ''}
+                                </div>
+                            `;
+                        }
+
+                        html += `
+                            <div style="border:1px solid #e5e7eb; border-radius:14px; padding:16px; margin-bottom:14px; background:#fafafa;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+                                    <strong style="color:#111; font-size:15px;">👤 ${o.customerName || 'غير مدخل'}</strong>
+                                    <span style="font-size:11px; color:#888; background:#f0f0f0; padding:3px 10px; border-radius:20px;">${date}</span>
+                                </div>
+                                <div style="font-size:13px; color:#555; line-height:1.9;">
+                                    📱 <strong>${o.phone || '-'}</strong> &nbsp;|&nbsp; ✉️ ${o.email || '-'}<br>
+                                    🏛️ ${o.governorate || '-'} &nbsp;|&nbsp; 🏠 ${o.address || '-'}<br>
+                                    💰 <strong style="color:#16a34a;">${o.total || 0} ج.م</strong> &nbsp;|&nbsp; 💳 ${o.paymentMethod === 'online' ? 'إنستاباي' : 'عند الاستلام'}
+                                </div>
+                                ${receiptHTML}
+                                <details style="margin-top:10px; font-size:12px; color:#666;">
+                                    <summary style="cursor:pointer; font-weight:600;">📦 تفاصيل المنتجات</summary>
+                                    <pre style="white-space:pre-wrap; font-family:'Cairo',sans-serif; margin-top:8px; background:#fff; padding:10px; border-radius:8px; border:1px solid #e5e7eb;">${o.productsList || ''}</pre>
+                                </details>
+                            </div>
+                        `;
+                    });
+                    body.innerHTML = html;
+                })
+                .catch(err => {
+                    console.error('❌ Firestore load error:', err);
+                    body.innerHTML = `<p style="color:#dc2626; text-align:center; padding:20px;">❌ خطأ في التحميل: ${err.message}<br><small>تأكدي إن Firestore مفعّل والـ rules مسموحة</small></p>`;
+                });
+        }
+
+        // رفع صورة الإيصال إلى Firebase Storage وإرجاع اللينك
+        async function uploadReceiptToStorage(file) {
+            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+            const path = `receipts/${Date.now()}_${safeName}`;
+            const ref = storage.ref().child(path);
+            const snapshot = await ref.put(file);
+            const url = await snapshot.ref.getDownloadURL();
+            console.log('✅ Receipt uploaded:', url);
+            return url;
         }
 
         // ============================================================
@@ -1855,7 +2361,7 @@
             const number = '01108776432';
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(number)
-                    .then(() => showNotification('✅ تم نسخ الرقم: ' + number, 'success'))
+                    .then(() => showNotification(currentLang === 'ar' ? '✅ تم نسخ الرقم: ' + number : '✅ Number copied: ' + number, 'success'))
                     .catch(() => fallbackCopy(number));
             } else {
                 fallbackCopy(number);
@@ -1871,9 +2377,9 @@
             textarea.select();
             try {
                 document.execCommand('copy');
-                showNotification('✅ تم نسخ الرقم: ' + text, 'success');
+                showNotification(currentLang === 'ar' ? '✅ تم نسخ الرقم: ' + text : '✅ Number copied: ' + text, 'success');
             } catch (err) {
-                showNotification('⚠️ فشل النسخ، الرقم: ' + text, 'error');
+                showNotification(currentLang === 'ar' ? '⚠️ فشل النسخ، الرقم: ' + text : '⚠️ Copy failed, number: ' + text, 'error');
             }
             document.body.removeChild(textarea);
         }
@@ -1883,7 +2389,7 @@
             if (!file) return;
 
             if (file.size > 5 * 1024 * 1024) {
-                showNotification('⚠️ حجم الصورة كبير جداً (الحد الأقصى 5 ميجا)', 'error');
+                showNotification(currentLang === 'ar' ? '⚠️ حجم الصورة كبير جداً (الحد الأقصى 5 ميجا)' : '⚠️ File too large (max 5MB)', 'error');
                 event.target.value = '';
                 return;
             }
@@ -1909,38 +2415,32 @@
 
             filename.textContent = '✅ ' + file.name;
             uploadSection.classList.add('has-file');
-            showNotification('✅ تم رفع صورة الإيصال', 'success');
+            showNotification(currentLang === 'ar' ? '✅ تم رفع صورة الإيصال' : '✅ Receipt uploaded', 'success');
         }
 
         // ============================================================
         // 11. دوال التنقل بين خطوتي الدفع والشحن
         // ============================================================
         function goToShippingStep() {
-            // التحقق من اختيار طريقة الدفع
             if (!selectedPaymentMethod) {
-                showNotification('⚠️ يرجى اختيار طريقة الدفع أولاً', 'error');
+                showNotification(currentLang === 'ar' ? '⚠️ يرجى اختيار طريقة الدفع أولاً' : '⚠️ Please choose payment method first', 'error');
                 return;
             }
 
-            // التحقق من رفع الإيصال لو أونلاين
             if (selectedPaymentMethod === 'online' && !receiptFile) {
-                showNotification('⚠️ يرجى رفع صورة إيصال التحويل أولاً', 'error');
+                showNotification(currentLang === 'ar' ? '⚠️ يرجى رفع صورة إيصال التحويل أولاً' : '⚠️ Please upload transfer receipt first', 'error');
                 return;
             }
 
-            // إخفاء خطوة الدفع + إظهار خطوة الشحن
             document.getElementById('paymentStep').style.display = 'none';
             document.getElementById('shippingStep').style.display = 'block';
-            document.getElementById('checkoutModalTitle').innerHTML = '📦 <span>بيانات</span> الشحن';
+            document.getElementById('checkoutModalTitle').innerHTML = t('shippingTitle');
 
-            // تحديث مؤشر الخطوات
             document.getElementById('stepIndicator1').classList.remove('active');
             document.getElementById('stepIndicator2').classList.add('active');
 
-            // تحديث ملخص الطلب
             updateOrderSummary();
 
-            // ملء البيانات تلقائياً
             const user = auth.currentUser;
             if (user) {
                 fillCheckoutFromProfile(user);
@@ -1950,9 +2450,8 @@
         function backToPaymentStep() {
             document.getElementById('shippingStep').style.display = 'none';
             document.getElementById('paymentStep').style.display = 'block';
-            document.getElementById('checkoutModalTitle').innerHTML = '💳 <span>بيانات</span> الدفع';
+            document.getElementById('checkoutModalTitle').innerHTML = t('paymentTitle');
 
-            // تحديث مؤشر الخطوات
             document.getElementById('stepIndicator2').classList.remove('active');
             document.getElementById('stepIndicator1').classList.add('active');
         }
@@ -1983,7 +2482,7 @@
             if (!messageTextarea) return;
 
             if (cart.length === 0) {
-                messageTextarea.value = '🛒 لا توجد منتجات في العربة';
+                messageTextarea.value = currentLang === 'ar' ? '🛒 لا توجد منتجات في العربة' : '🛒 No products in cart';
                 return;
             }
 
@@ -1996,8 +2495,9 @@
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 totalItems += item.quantity;
-                message += `${index + 1}. ${item.name}\n`;
-                message += `   Size: ${item.selectedSize || 'Not specified'} | Qty: ${item.quantity} | Price: ${itemTotal} EGP\n\n`;
+                const itemName = currentLang === 'en' && item.nameEn ? item.nameEn : item.name;
+                message += `${index + 1}. ${itemName}\n`;
+                message += `   Size: ${item.selectedSize || 'Not specified'} | Color: ${item.selectedColor || 'Not specified'} | Qty: ${item.quantity} | Price: ${itemTotal} EGP\n\n`;
             });
 
             message += '━'.repeat(35) + '\n';
@@ -2016,7 +2516,7 @@
         // ============================================================
         function checkout() {
             if (cart.length === 0) {
-                showNotification("⚠️ عربتك فارغة!");
+                showNotification(t('cartEmptyAlert'));
                 return;
             }
 
@@ -2024,24 +2524,23 @@
             if (!user) {
                 pendingCheckout = true;
                 if (document.getElementById('cartSidebar')?.classList.contains('open')) toggleCart();
-                document.getElementById('loginSubtitle').textContent = '🔐 يرجى تسجيل الدخول لإتمام طلبك';
+                document.getElementById('loginSubtitle').textContent = t('loginSubtitleCheckout');
                 showLogin();
-                showNotification("🔐 يرجى تسجيل الدخول أولاً لإتمام الطلب", "error");
+                showNotification(t('loginRequired'), "error");
                 return;
             }
 
             const profile = JSON.parse(localStorage.getItem('userProfile_' + user.uid)) || {};
-            if (!profile.firstName || !profile.lastName || !profile.phone || !profile.address) {
+            if (!profile.firstName || !profile.lastName || !profile.phone || !profile.governorate || !profile.address) {
                 pendingCheckout = true;
                 if (document.getElementById('cartSidebar')?.classList.contains('open')) toggleCart();
-                showNotification('⚠️ يرجى إكمال بياناتك أولاً', 'error');
+                showNotification(t('profileRequired'), 'error');
                 openProfileModal(user);
                 return;
             }
 
             if (document.getElementById('cartSidebar')?.classList.contains('open')) toggleCart();
 
-            // إعادة تعيين اختيارات الدفع
             selectedPaymentMethod = null;
             receiptFile = null;
             receiptFileName = '';
@@ -2053,10 +2552,9 @@
             document.getElementById('receiptFile').value = '';
             document.getElementById('receiptFilename').textContent = '';
 
-            // إعادة تعيين الخطوات → ابدأ بخطوة الدفع
             document.getElementById('paymentStep').style.display = 'block';
             document.getElementById('shippingStep').style.display = 'none';
-            document.getElementById('checkoutModalTitle').innerHTML = '💳 <span>بيانات</span> الدفع';
+            document.getElementById('checkoutModalTitle').innerHTML = t('paymentTitle');
             document.getElementById('stepIndicator1').classList.add('active');
             document.getElementById('stepIndicator2').classList.remove('active');
 
@@ -2073,12 +2571,14 @@
             const firstNameInput = document.getElementById('checkoutFirstName');
             const lastNameInput = document.getElementById('checkoutLastName');
             const phoneInput = document.getElementById('checkoutPhone');
+            const governorateInput = document.getElementById('checkoutGovernorate');
             const addressInput = document.getElementById('checkoutAddress');
             const emailInput = document.getElementById('checkoutEmail');
 
             if (firstNameInput && profile.firstName) firstNameInput.value = profile.firstName;
             if (lastNameInput && profile.lastName) lastNameInput.value = profile.lastName;
             if (phoneInput && profile.phone) phoneInput.value = profile.phone;
+            if (governorateInput && profile.governorate) governorateInput.value = profile.governorate;
             if (addressInput && profile.address) addressInput.value = profile.address;
             if (emailInput && user.email) emailInput.value = user.email;
         }
@@ -2088,15 +2588,16 @@
         }
 
         // ============================================================
-        // 14. إرسال الطلب عبر Formcarry
+        // 14. إرسال الطلب عبر Formcarry (بـ Timeout 30 ثانية)
         // ============================================================
-        async function submitOrderWithFormcarry(name, phone, email, address, productsList, total, totalItems, paymentMethod, receiptInfo) {
+        async function submitOrderWithFormcarry(name, phone, email, address, governorate, productsList, total, totalItems, paymentMethod, receiptInfo, receiptUrl) {
             try {
                 const formData = new FormData();
                 formData.append("customer_name", name);
                 formData.append("customer_phone", phone);
                 formData.append("customer_email", email);
                 formData.append("customer_address", address);
+                formData.append("customer_governorate", governorate);
                 formData.append("products_list", productsList);
                 formData.append("total_items", totalItems + " قطعة");
                 formData.append("total_price", total + " ج.م");
@@ -2104,6 +2605,13 @@
                 formData.append("order_date", new Date().toLocaleDateString("ar-EG"));
                 formData.append("order_time", new Date().toLocaleTimeString("ar-EG"));
                 formData.append("store_name", "Aviro Store");
+
+                // لينك الإيصال في حقل مستقل
+                if (receiptUrl) {
+                    formData.append("receipt_link", receiptUrl);
+                    // ✅ حقل جديد بالشكل المطلوب: "الإيصال: <اللينك>"
+                    formData.append("receipt_label", "الإيصال: " + receiptUrl);
+                }
 
                 if (receiptInfo && receiptInfo.file) {
                     formData.append("payment_receipt", receiptInfo.file);
@@ -2115,19 +2623,27 @@
                     `👤 العميل: ${name}\n` +
                     `📱 الهاتف: ${phone}\n` +
                     `✉️ البريد: ${email}\n` +
+                    `🏛️ المحافظة: ${governorate}\n` +
                     `🏠 العنوان: ${address}\n\n` +
                     `💳 طريقة الدفع: ${paymentMethod === 'online' ? 'أونلاين (إنستاباي)' : 'عند الاستلام'}\n` +
-                    (receiptInfo && receiptInfo.file ? `📸 إيصال التحويل: مرفق\n` : '') +
+                    // ✅ الشكل المطلوب: "الإيصال: <اللينك>"
+                    (receiptUrl ? `الإيصال: ${receiptUrl}\n` : '') +
                     `\n📦 المنتجات:\n${productsList}\n\n` +
                     `📊 إجمالي القطع: ${totalItems}\n` +
                     `💰 الإجمالي: ${total} ج.م`
                 );
 
+                // Timeout 30 ثانية
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+
                 const response = await fetch(FORMCARRY_ENDPOINT, {
                     method: "POST",
                     body: formData,
-                    headers: FORMCARRY_HEADERS
+                    headers: FORMCARRY_HEADERS,
+                    signal: controller.signal
                 });
+                clearTimeout(timeoutId);
 
                 if (!response.ok) {
                     const errText = await response.text();
@@ -2140,22 +2656,25 @@
                 return { success: true, data: result };
             } catch (error) {
                 console.error("❌ Formcarry catch:", error);
+                if (error.name === 'AbortError') {
+                    return { success: false, error: 'انتهت مهلة الإرسال (30 ثانية) — تحقق من الاتصال' };
+                }
                 return { success: false, error: error.message };
             }
         }
 
         // ============================================================
-        // 15. sendOrder — إرسال الطلب
+        // 15. sendOrder — إرسال الطلب + رفع الإيصال + حفظ في Firestore
         // ============================================================
         async function sendOrder() {
             if (!selectedPaymentMethod) {
-                alert("⚠️ يرجى اختيار طريقة الدفع أولاً");
+                alert(currentLang === 'ar' ? "⚠️ يرجى اختيار طريقة الدفع أولاً" : "⚠️ Please choose payment method first");
                 backToPaymentStep();
                 return;
             }
 
             if (selectedPaymentMethod === 'online' && !receiptFile) {
-                alert("⚠️ يرجى رفع صورة إيصال التحويل أولاً");
+                alert(currentLang === 'ar' ? "⚠️ يرجى رفع صورة إيصال التحويل أولاً" : "⚠️ Please upload transfer receipt first");
                 backToPaymentStep();
                 return;
             }
@@ -2163,6 +2682,7 @@
             let firstName = document.getElementById('checkoutFirstName').value.trim();
             let lastName = document.getElementById('checkoutLastName').value.trim();
             const phone = document.getElementById('checkoutPhone').value.trim();
+            const governorate = document.getElementById('checkoutGovernorate').value.trim();
             const address = document.getElementById('checkoutAddress').value.trim();
             const email = document.getElementById('checkoutEmail').value.trim();
 
@@ -2176,13 +2696,13 @@
             const finalAddress = address || 'غير مدخل';
             const finalEmail = email || 'غير مدخل';
 
-            if (!firstName || !lastName || !finalPhone || !finalAddress) {
-                alert("⚠️ برجاء إدخال جميع البيانات (الاسم، رقم الهاتف، العنوان)!");
+            if (!firstName || !lastName || !finalPhone || !governorate || !finalAddress) {
+                alert(currentLang === 'ar' ? "⚠️ برجاء إدخال جميع البيانات (الاسم، رقم الهاتف، المحافظة، العنوان)!" : "⚠️ Please enter all data (name, phone, governorate, address)!");
                 return;
             }
 
             if (!finalEmail.includes('@') || !finalEmail.includes('.')) {
-                alert("⚠️ برجاء إدخال بريد إلكتروني صحيح!");
+                alert(currentLang === 'ar' ? "⚠️ برجاء إدخال بريد إلكتروني صحيح!" : "⚠️ Please enter a valid email!");
                 return;
             }
 
@@ -2194,39 +2714,88 @@
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 totalItems += item.quantity;
-                productsList += `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
+                const itemName = currentLang === 'en' && item.nameEn ? item.nameEn : item.name;
+                productsList += `${index + 1}. ${itemName} | مقاس: ${item.selectedSize} | لون: ${item.selectedColor || 'غير محدد'} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
             });
 
             if (cart.length === 0) {
-                alert("⚠️ عربتك فارغة!");
+                alert(t('cartEmptyAlert'));
                 return;
             }
 
-            showNotification('📧 جاري إرسال الطلب...');
+            showNotification(currentLang === 'ar' ? '📧 جاري إرسال الطلب...' : '📧 Sending order...');
 
             const statusEl = document.getElementById('contactStatus');
             const submitBtn = document.getElementById('contactSubmitBtn');
 
             if (statusEl) {
-                statusEl.textContent = '⏳ جاري الإرسال...';
+                statusEl.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
                 statusEl.className = 'status-msg';
             }
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.textContent = '⏳ جاري الإرسال...';
+                submitBtn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
             }
 
+            // ✅ رفع الإيصال على Firebase Storage (لو فشل، الطلب بيكمل عادي)
+            let receiptUrl = null;
+            if (receiptFile) {
+                try {
+                    if (statusEl) statusEl.textContent = currentLang === 'ar' ? '📤 جاري رفع الإيصال...' : '📤 Uploading receipt...';
+                    receiptUrl = await uploadReceiptToStorage(receiptFile);
+                } catch (err) {
+                    console.error('❌ Receipt upload error:', err);
+                    // ⚠️ مش بنوقف الطلب — بنكمل من غير لينك، والملف هيتبعت مرفق في Formcarry
+                    receiptUrl = null;
+                    showNotification(
+                        currentLang === 'ar'
+                            ? '⚠️ تعذر رفع الإيصال على السيرفر، هيتبعت كمرفق'
+                            : '⚠️ Could not upload receipt, will send as attachment',
+                        'error'
+                    );
+                }
+            }
+
+            // ✅ حفظ الطلب + لينك الإيصال في Firestore
+            try {
+                await db.collection('orders').add({
+                    customerName: finalName,
+                    firstName: finalFirstName,
+                    lastName: finalLastName,
+                    phone: finalPhone,
+                    rawPhone: phone,
+                    email: finalEmail,
+                    address: finalAddress,
+                    governorate: governorate,
+                    productsList: productsList,
+                    total: total,
+                    totalItems: totalItems,
+                    paymentMethod: selectedPaymentMethod,
+                    receiptUrl: receiptUrl,
+                    receiptFileName: receiptFileName || null,
+                    userId: auth.currentUser ? auth.currentUser.uid : null,
+                    userEmail: auth.currentUser ? auth.currentUser.email : null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                console.log('✅ Order saved to Firestore. Receipt URL:', receiptUrl);
+            } catch (err) {
+                console.error('❌ Firestore save error:', err);
+                showNotification(currentLang === 'ar' ? '⚠️ لم يتم حفظ الطلب في السجل (لكن هيتبعت)' : '⚠️ Order not saved in log (but will be sent)', 'error');
+            }
+
+            // ✅ إرسال إلى Formcarry (مع لينك الإيصال)
             const result = await submitOrderWithFormcarry(
-                finalName, finalPhone, finalEmail, finalAddress,
+                finalName, finalPhone, finalEmail, finalAddress, governorate,
                 productsList, total, totalItems,
                 selectedPaymentMethod,
-                receiptFile ? { file: receiptFile, fileName: receiptFileName } : null
+                receiptFile ? { file: receiptFile, fileName: receiptFileName } : null,
+                receiptUrl
             );
 
             if (result.success) {
-                showNotification('✅ تم إرسال الطلب بنجاح! سيتم التواصل معك قريباً.', 'success');
+                showNotification(currentLang === 'ar' ? '✅ تم إرسال الطلب بنجاح! سيتم التواصل معك قريباً.' : '✅ Order sent successfully! We will contact you soon.', 'success');
                 if (statusEl) {
-                    statusEl.textContent = '✅ تم إرسال طلبك بنجاح! سيتم التواصل معك قريباً.';
+                    statusEl.textContent = currentLang === 'ar' ? '✅ تم إرسال طلبك بنجاح! سيتم التواصل معك قريباً.' : '✅ Order sent successfully! We will contact you soon.';
                     statusEl.className = 'status-msg success';
                 }
 
@@ -2237,7 +2806,7 @@
 
                 setTimeout(() => {
                     closeCheckoutModal();
-                    document.querySelectorAll('#checkoutModal input, #checkoutModal textarea').forEach(el => {
+                    document.querySelectorAll('#checkoutModal input, #checkoutModal textarea, #checkoutModal select').forEach(el => {
                         el.value = '';
                     });
                     if (statusEl) {
@@ -2246,16 +2815,16 @@
                     }
                 }, 2500);
             } else {
-                showNotification('❌ فشل إرسال الطلب، يرجى المحاولة مرة أخرى', 'error');
+                showNotification(currentLang === 'ar' ? '❌ فشل إرسال الطلب، يرجى المحاولة مرة أخرى' : '❌ Order send failed, please try again', 'error');
                 if (statusEl) {
-                    statusEl.textContent = '❌ فشل الإرسال: ' + (result.error || 'خطأ غير معروف');
+                    statusEl.textContent = (currentLang === 'ar' ? '❌ فشل الإرسال: ' : '❌ Send failed: ') + (result.error || (currentLang === 'ar' ? 'خطأ غير معروف' : 'Unknown error'));
                     statusEl.className = 'status-msg error';
                 }
             }
 
             if (submitBtn) {
                 submitBtn.disabled = false;
-                submitBtn.textContent = '📧 تأكيد وإرسال الطلب';
+                submitBtn.textContent = t('confirmOrderBtn');
             }
         }
 
@@ -2277,8 +2846,8 @@
                     container.innerHTML = `
                         <div style="grid-column:1/-1; text-align:center; padding:80px 20px; color:#888;">
                             <span style="font-size:60px; display:block; margin-bottom:20px;">🔍</span>
-                            <h2 style="font-size:28px; margin-bottom:10px; color:#111;">لا توجد منتجات</h2>
-                            <p>حاول تغيير كلمة البحث أو التصنيف</p>
+                            <h2 style="font-size:28px; margin-bottom:10px; color:#111;">${t('noProducts')}</h2>
+                            <p>${t('trySearch')}</p>
                         </div>
                     `;
                     return;
@@ -2286,6 +2855,7 @@
 
                 productsToDisplay.forEach(product => {
                     const is360 = product.images360 && product.images360.length > 0;
+                    const displayName = currentLang === 'en' && product.nameEn ? product.nameEn : product.name;
                     let imageHTML = '';
                     if (is360) {
                         imageHTML = `
@@ -2298,37 +2868,54 @@
                                  ontouchstart="startDragTouch(event, ${product.id})"
                                  ontouchmove="dragRotateTouch(event, ${product.id})"
                                  ontouchend="endDrag()">
-                                <img id="img-${product.id}" src="${product.images360[0]}" alt="${product.name}">
+                                <img id="img-${product.id}" src="${product.images360[0]}" alt="${displayName}">
                                 <span class="badge-360">🔄 360°</span>
                             </div>
                         `;
                         currentImageIndex[product.id] = 0;
                     } else {
-                        imageHTML = `<div class="product-image-wrapper"><img src="${product.image}" alt="${product.name}"></div>`;
+                        imageHTML = `<div class="product-image-wrapper"><img src="${product.image}" alt="${displayName}"></div>`;
                     }
 
                     const stars = '⭐'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '⭐' : '');
                     const discountPercent = product.discount ? `<span class="discount-badge">${product.discount}</span>` : '';
-                    const freeShipping = product.freeShipping ? `<span class="free-shipping">🚚 توصيل مجاني</span>` : '';
+                    const freeShipping = product.freeShipping ? `<span class="free-shipping">${t('freeShipping')}</span>` : '';
+
+                    let colorsHTML = '';
+                    if (product.colors && product.colors.length > 0) {
+                        colorsHTML = `<span class="color-label">${t('chooseColor')}</span>
+                        <div class="color-selector" id="colorContainer-${product.id}">`;
+                        product.colors.forEach(color => {
+                            const colorName = currentLang === 'en' && color.nameEn ? color.nameEn : color.name;
+                            colorsHTML += `<div class="color-option" 
+                                data-color="${color.name}" 
+                                style="background-color: ${color.hex}; ${color.hex === '#ffffff' ? 'border: 2px solid #ccc;' : ''}"
+                                onclick="event.stopPropagation(); selectColor(${product.id}, '${color.name}', this)">
+                                <span class="color-tooltip">${colorName}</span>
+                            </div>`;
+                        });
+                        colorsHTML += `</div>`;
+                    }
 
                     container.innerHTML += `
                         <div class="product-card" onclick="openProductDetails(${product.id})">
                             ${imageHTML}
                             ${discountPercent}
                             <div class="product-info">
-                                <h3>${product.name}</h3>
+                                <h3>${displayName}</h3>
                                 <div class="rating">
                                     <span class="stars">${stars}</span>
                                     <span class="count">(${product.reviews || 0})</span>
                                 </div>
+                                ${colorsHTML}
                                 <div class="price-container">
-                                    <span class="current-price">${product.price} ج.م</span>
-                                    ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}
+                                    <span class="current-price">${product.price} ${t('currencyLabel')}</span>
+                                    ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ${t('currencyLabel')}</span>` : ''}
                                     ${product.discount ? `<span class="discount-percent">${product.discount}</span>` : ''}
                                 </div>
                                 ${freeShipping}
                                 <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">
-                                    🛒 إضافة إلى العربة
+                                    ${t('addToCart')}
                                 </button>
                             </div>
                         </div>
@@ -2353,7 +2940,7 @@
             const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
             let filtered = allProducts;
             if (category !== 'all') filtered = filtered.filter(p => p.category === category);
-            if (searchInput) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchInput));
+            if (searchInput) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchInput) || (p.nameEn && p.nameEn.toLowerCase().includes(searchInput)));
 
             displayProducts(filtered);
         }
@@ -2362,10 +2949,13 @@
             const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
             let filtered = allProducts;
             if (currentCategory !== 'all') filtered = filtered.filter(p => p.category === currentCategory);
-            if (searchInput) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchInput));
+            if (searchInput) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchInput) || (p.nameEn && p.nameEn.toLowerCase().includes(searchInput)));
             displayProducts(filtered);
         }
 
+        // ============================================================
+        // 17. دوال اختيار الألوان والمقاسات
+        // ============================================================
         function selectSize(productId, size) {
             selectedSizes[productId] = size;
             const container = document.getElementById(`sizeContainer-${productId}`);
@@ -2376,11 +2966,33 @@
                 });
             }
             const product = allProducts.find(p => p.id === productId);
-            if (product) showNotification(`✅ تم اختيار المقاس ${size} لمنتج "${product.name}"`);
+            if (product) showNotification(`✅ ${size}`);
+        }
+
+        function selectColor(productId, colorName, element) {
+            selectedColors[productId] = colorName;
+            const container = document.getElementById(`colorContainer-${productId}`);
+            if (container) {
+                container.querySelectorAll('.color-option').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                if (element) element.classList.add('selected');
+            }
+        }
+
+        function selectDetailColor(colorName, element) {
+            detailSelectedColor = colorName;
+            const container = document.getElementById('detailColorSelector');
+            if (container) {
+                container.querySelectorAll('.color-option').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                if (element) element.classList.add('selected');
+            }
         }
 
         // ============================================================
-        // 17. صورة 360
+        // 18. صورة 360
         // ============================================================
         function startDrag(e, id) {
             isDragging = true;
@@ -2454,7 +3066,7 @@
         }
 
         // ============================================================
-        // 18. السلة
+        // 19. السلة
         // ============================================================
         function toggleCart() {
             const sidebar = document.getElementById('cartSidebar');
@@ -2468,25 +3080,41 @@
         function addToCart(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product) return;
+
             const selectedSize = selectedSizes[id];
+            const selectedColor = selectedColors[id];
+
             if (product.sizes && product.sizes.length > 0 && !selectedSize) {
-                showNotification(`⚠️ يرجى اختيار مقاس لمنتج "${product.name}"`);
+                showNotification(t('sizeRequired'), 'error');
                 return;
             }
-            const existingIndex = cart.findIndex(item => item.id === id && item.selectedSize === selectedSize);
+
+            if (product.colors && product.colors.length > 0 && !selectedColor) {
+                showNotification(t('colorRequired'), 'error');
+                return;
+            }
+
+            const existingIndex = cart.findIndex(item =>
+                item.id === id &&
+                item.selectedSize === selectedSize &&
+                item.selectedColor === selectedColor
+            );
+
             if (existingIndex !== -1) {
                 cart[existingIndex].quantity++;
             } else {
                 cart.push({
                     ...product,
                     quantity: 1,
-                    selectedSize: selectedSize || 'غير محدد'
+                    selectedSize: selectedSize || (currentLang === 'ar' ? 'غير محدد' : 'Not specified'),
+                    selectedColor: selectedColor || (currentLang === 'ar' ? 'غير محدد' : 'Not specified')
                 });
             }
+
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
-            showNotification(`✅ تم إضافة "${product.name}" إلى العربة!`, 'success');
+            showNotification(t('addedToCart'), 'success');
         }
 
         function updateCartIconCount() {
@@ -2502,7 +3130,7 @@
 
             if (cart.length === 0) {
                 cartItems.innerHTML =
-                    `<div class="empty-cart-msg"><span class="icon">🛒</span><p>لا توجد منتجات في العربة</p></div>`;
+                    `<div class="empty-cart-msg"><span class="icon">🛒</span><p>${t('cartEmpty')}</p></div>`;
                 if (cartTotal) cartTotal.innerText = '0';
                 return;
             }
@@ -2512,28 +3140,32 @@
             cart.forEach(item => {
                 total += item.price * item.quantity;
                 const imgSrc = item.images360 ? item.images360[0] : item.image;
+                const displayName = currentLang === 'en' && item.nameEn ? item.nameEn : item.name;
+                const colorInfo = item.selectedColor && item.selectedColor !== 'غير محدد' && item.selectedColor !== 'Not specified' ? ` | 🎨 ${item.selectedColor}` : '';
+                const sizeInfo = item.selectedSize && item.selectedSize !== 'غير محدد' && item.selectedSize !== 'Not specified' ? ` | 📏 ${item.selectedSize}` : '';
+
                 cartItems.innerHTML += `
                     <div class="cart-item">
-                        <img src="${imgSrc}" alt="${item.name}">
+                        <img src="${imgSrc}" alt="${displayName}">
                         <div class="cart-item-info">
-                            <h4>${item.name}</h4>
-                            <p class="cart-item-price">${item.price} ج.م</p>
-                            <p class="cart-item-size">المقاس: ${item.selectedSize || 'غير محدد'}</p>
+                            <h4>${displayName}</h4>
+                            <p class="cart-item-price">${item.price} ${t('currencyLabel')}</p>
+                            <p class="cart-item-size">${sizeInfo}${colorInfo}</p>
                             <div class="qty-box">
-                                <button onclick="changeQuantity(${item.id}, -1, '${item.selectedSize}')">−</button>
+                                <button onclick="changeQuantity(${item.id}, -1, '${item.selectedSize}', '${item.selectedColor || ''}')">−</button>
                                 <span>${item.quantity}</span>
-                                <button onclick="changeQuantity(${item.id}, 1, '${item.selectedSize}')">+</button>
+                                <button onclick="changeQuantity(${item.id}, 1, '${item.selectedSize}', '${item.selectedColor || ''}')">+</button>
                             </div>
                         </div>
-                        <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.selectedSize}')">🗑️</button>
+                        <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.selectedSize}', '${item.selectedColor || ''}')">🗑️</button>
                     </div>
                 `;
             });
             if (cartTotal) cartTotal.innerText = total;
         }
 
-        function changeQuantity(id, change, size) {
-            const index = cart.findIndex(item => item.id === id && item.selectedSize === size);
+        function changeQuantity(id, change, size, color) {
+            const index = cart.findIndex(item => item.id === id && item.selectedSize === size && item.selectedColor === color);
             if (index === -1) return;
             cart[index].quantity += change;
             if (cart[index].quantity <= 0) cart.splice(index, 1);
@@ -2542,20 +3174,20 @@
             renderCart();
         }
 
-        function removeFromCart(id, size) {
-            cart = cart.filter(item => !(item.id === id && item.selectedSize === size));
+        function removeFromCart(id, size, color) {
+            cart = cart.filter(item => !(item.id === id && item.selectedSize === size && item.selectedColor === color));
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
         }
 
         function clearCart() {
-            if (confirm("هل أنت متأكد من تفريغ العربة بالكامل؟")) {
+            if (confirm(t('clearCartConfirm'))) {
                 cart = [];
                 localStorage.setItem("cart", JSON.stringify(cart));
                 updateCartIconCount();
                 renderCart();
-                showNotification("🗑️ تم تفريغ العربة");
+                showNotification(t('cartCleared'));
             }
         }
 
@@ -2578,17 +3210,23 @@
         }
 
         // ============================================================
-        // 19. تفاصيل المنتج
+        // 20. تفاصيل المنتج
         // ============================================================
         function openProductDetails(productId) {
             const product = allProducts.find(p => p.id === productId);
             if (!product) {
-                showNotification('⚠️ المنتج غير موجود');
+                showNotification(currentLang === 'ar' ? '⚠️ المنتج غير موجود' : '⚠️ Product not found');
                 return;
             }
 
             currentDetailProductId = productId;
             detailSelectedSize = null;
+            detailSelectedColor = null;
+
+            const displayName = currentLang === 'en' && product.nameEn ? product.nameEn : product.name;
+            const displayDesc = currentLang === 'en' && product.descriptionEn ? product.descriptionEn : product.description;
+            const displayMaterial = currentLang === 'en' && product.materialEn ? product.materialEn : product.material;
+            const displayWarranty = currentLang === 'en' && product.warrantyEn ? product.warrantyEn : product.warranty;
 
             const modal = document.getElementById('productDetailsModal');
             const content = document.getElementById('productDetailsContent');
@@ -2596,11 +3234,26 @@
 
             let sizesHTML = '';
             if (product.sizes && product.sizes.length > 0) {
-                sizesHTML = `<div class="size-selector">`;
+                sizesHTML = `<span class="color-label">${t('chooseSize')}</span><div class="size-selector">`;
                 product.sizes.forEach(size => {
                     sizesHTML += `<button class="size-btn" onclick="selectDetailSize('${size}')" data-size="${size}">${size}</button>`;
                 });
                 sizesHTML += `</div>`;
+            }
+
+            let colorsHTML = '';
+            if (product.colors && product.colors.length > 0) {
+                colorsHTML = `<span class="color-label">${t('chooseColor')}</span>
+                <div class="color-selector" id="detailColorSelector" style="justify-content:flex-start;">`;
+                product.colors.forEach(color => {
+                    const colorName = currentLang === 'en' && color.nameEn ? color.nameEn : color.name;
+                    colorsHTML += `<div class="color-option" 
+                        style="background-color: ${color.hex}; ${color.hex === '#ffffff' ? 'border: 2px solid #ccc;' : ''}"
+                        onclick="selectDetailColor('${color.name}', this)">
+                        <span class="color-tooltip">${colorName}</span>
+                    </div>`;
+                });
+                colorsHTML += `</div>`;
             }
 
             const fullStars = Math.floor(product.rating);
@@ -2608,47 +3261,48 @@
             let starsHTML = '⭐'.repeat(fullStars) + (halfStar ? '⭐' : '');
 
             const freeShippingHTML = product.freeShipping ?
-                `<span style="color:#2e7d32; font-weight:700; font-size:14px; display:inline-block; background:rgba(46,125,50,0.1); padding:5px 12px; border-radius:20px;">🚚 توصيل مجاني</span>` : '';
+                `<span style="color:#2e7d32; font-weight:700; font-size:14px; display:inline-block; background:rgba(46,125,50,0.1); padding:5px 12px; border-radius:20px;">${t('freeShipping')}</span>` : '';
 
             let thumbnailsHTML = images.map((img, i) => `
-                <img src="${img}" alt="${product.name}" onclick="changeDetailImage(${i})" data-index="${i}" ${i === 0 ? 'class="active"' : ''}>
+                <img src="${img}" alt="${displayName}" onclick="changeDetailImage(${i})" data-index="${i}" ${i === 0 ? 'class="active"' : ''}>
             `).join('');
 
             content.innerHTML = `
                 <div class="product-details-grid">
                     <div class="product-details-images">
                         <div class="product-details-main-image" id="detailMainImage" onclick="toggleZoom()">
-                            <img src="${images[0]}" alt="${product.name}" id="detailMainImg">
+                            <img src="${images[0]}" alt="${displayName}" id="detailMainImg">
                         </div>
                         <div class="product-details-thumbnails" id="detailThumbnails">
                             ${thumbnailsHTML}
                         </div>
                     </div>
                     <div class="product-details-info">
-                        <button class="back-btn" onclick="closeProductDetails()">← العودة إلى المتجر</button>
-                        <h1>${product.name}</h1>
+                        <button class="back-btn" onclick="closeProductDetails()">${t('backToStore')}</button>
+                        <h1>${displayName}</h1>
                         <div class="rating-row">
                             <span class="stars">${starsHTML}</span>
-                            <span class="reviews">(${product.reviews || 0} تقييم)</span>
+                            <span class="reviews">(${product.reviews || 0} ${t('reviewsLabel')})</span>
                         </div>
                         <div class="price-row">
-                            <span class="current">${product.price} ج.م</span>
-                            ${product.oldPrice ? `<span class="old">${product.oldPrice} ج.م</span>` : ''}
-                            ${product.discount ? `<span class="discount">${product.discount} خصم</span>` : ''}
+                            <span class="current">${product.price} ${t('currencyLabel')}</span>
+                            ${product.oldPrice ? `<span class="old">${product.oldPrice} ${t('currencyLabel')}</span>` : ''}
+                            ${product.discount ? `<span class="discount">${product.discount} ${t('discountLabel')}</span>` : ''}
                         </div>
                         ${freeShippingHTML}
                         <div class="description">
-                            <strong>📝 الوصف:</strong>
-                            <p>${product.description || 'لا يوجد وصف لهذا المنتج'}</p>
+                            <strong>${t('descriptionLabel')}</strong>
+                            <p>${displayDesc || (currentLang === 'ar' ? 'لا يوجد وصف' : 'No description')}</p>
                         </div>
                         <div class="specs">
-                            <span><strong>🏷️ العلامة التجارية:</strong> ${product.brand || 'Aviro'}</span>
-                            <span><strong>🧵 المادة:</strong> ${product.material || 'غير محدد'}</span>
-                            <span><strong>✅ الضمان:</strong> ${product.warranty || 'غير محدد'}</span>
-                            <span><strong>📦 التوصيل:</strong> ${product.freeShipping ? 'مجاني' : 'يتم حسابه عند الشراء'}</span>
+                            <span><strong>${t('brandLabel')}</strong> ${product.brand || 'Aviro'}</span>
+                            <span><strong>${t('materialLabel')}</strong> ${displayMaterial || (currentLang === 'ar' ? 'غير محدد' : 'Not specified')}</span>
+                            <span><strong>${t('warrantyLabel')}</strong> ${displayWarranty || (currentLang === 'ar' ? 'غير محدد' : 'Not specified')}</span>
+                            <span><strong>${t('deliveryLabel')}</strong> ${product.freeShipping ? t('freeLabel') : t('calculatedAtCheckout')}</span>
                         </div>
+                        ${colorsHTML}
                         ${sizesHTML}
-                        <button class="add-to-cart-btn" onclick="addToCartFromDetails()">🛒 إضافة إلى العربة</button>
+                        <button class="add-to-cart-btn" onclick="addToCartFromDetails()">${t('addToCart')}</button>
                     </div>
                 </div>
             `;
@@ -2662,6 +3316,7 @@
             document.body.style.overflow = '';
             currentDetailProductId = null;
             detailSelectedSize = null;
+            detailSelectedColor = null;
         }
 
         function changeDetailImage(index) {
@@ -2694,12 +3349,23 @@
             if (!product) return;
 
             if (product.sizes && product.sizes.length > 0 && !detailSelectedSize) {
-                showNotification('⚠️ يرجى اختيار المقاس أولاً');
+                showNotification(t('sizeRequired'), 'error');
                 return;
             }
 
-            const selectedSize = detailSelectedSize || 'غير محدد';
-            const existingIndex = cart.findIndex(item => item.id === product.id && item.selectedSize === selectedSize);
+            if (product.colors && product.colors.length > 0 && !detailSelectedColor) {
+                showNotification(t('colorRequired'), 'error');
+                return;
+            }
+
+            const selectedSize = detailSelectedSize || (currentLang === 'ar' ? 'غير محدد' : 'Not specified');
+            const selectedColor = detailSelectedColor || (currentLang === 'ar' ? 'غير محدد' : 'Not specified');
+
+            const existingIndex = cart.findIndex(item =>
+                item.id === product.id &&
+                item.selectedSize === selectedSize &&
+                item.selectedColor === selectedColor
+            );
 
             if (existingIndex !== -1) {
                 cart[existingIndex].quantity++;
@@ -2707,19 +3373,20 @@
                 cart.push({
                     ...product,
                     quantity: 1,
-                    selectedSize: selectedSize
+                    selectedSize: selectedSize,
+                    selectedColor: selectedColor
                 });
             }
 
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
-            showNotification(`✅ تم إضافة "${product.name}" إلى العربة!`, 'success');
+            showNotification(t('addedToCart'), 'success');
             closeProductDetails();
         }
 
         // ============================================================
-        // 20. نموذج الطلب — Formcarry
+        // 21. نموذج الطلب — Formcarry
         // ============================================================
         const contactForm = document.getElementById('contactForm');
         if (contactForm) {
@@ -2730,7 +3397,7 @@
         }
 
         // ============================================================
-        // 21. ربط الأحداث
+        // 22. ربط الأحداث
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('scroll', () => {
@@ -2763,11 +3430,17 @@
                 if (e.target === this) closeAboutModal();
             });
 
+            document.getElementById('ordersModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closeOrdersPanel();
+            });
+
             displayProducts(allProducts);
             updateCartIconCount();
+
+            setTimeout(() => applyLanguage(currentLang), 100);
         });
 
-        console.log('✅ المتجر جاهز - تدفق دفع من خطوتين (دفع → شحن)!');
+        console.log('✅ المتجر جاهز - الإيصال بيتبعت بالشكل: "الإيصال: <link>" + Timeout 30s!');
     </script>
 </body>
 

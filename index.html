@@ -16,9 +16,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-    <!-- Forminit SDK -->
-    <script src="https://forminit.com/sdk/v1/forminit.js"></script>
-
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', "Segoe UI", Tahoma, sans-serif; }
         html { scroll-behavior: smooth; }
@@ -911,12 +908,12 @@
                         <div class="forminit-contact-section">
                             <form id="contactForm">
                                 <div class="form-grid">
-                                    <input type="text" name="fi-sender-firstName" placeholder="الاسم الأول" required>
-                                    <input type="text" name="fi-sender-lastName" placeholder="الاسم الأخير" required>
-                                    <input type="text" name="fi-sender-phone" placeholder="رقم الهاتف" required>
-                                    <input type="text" name="fi-sender-address" placeholder="العنوان" required>
-                                    <input type="email" name="fi-sender-email" placeholder="البريد الإلكتروني" required class="full-width">
-                                    <textarea name="fi-text-message" placeholder="رسالتك..." rows="8" class="full-width order-message-textarea" id="orderMessage" readonly></textarea>
+                                    <input type="text" name="firstName" id="checkoutFirstName" placeholder="الاسم الأول" required>
+                                    <input type="text" name="lastName" id="checkoutLastName" placeholder="الاسم الأخير" required>
+                                    <input type="text" name="phone" id="checkoutPhone" placeholder="رقم الهاتف" required>
+                                    <input type="text" name="address" id="checkoutAddress" placeholder="العنوان" required>
+                                    <input type="email" name="email" id="checkoutEmail" placeholder="البريد الإلكتروني" required class="full-width">
+                                    <textarea name="orderSummary" placeholder="ملخص الطلب..." rows="8" class="full-width order-message-textarea" id="orderMessage" readonly></textarea>
                                     <button type="submit" class="submit-btn" id="contactSubmitBtn">📧 تأكيد وإرسال الطلب</button>
                                     <p id="contactStatus" class="status-msg"></p>
                                 </div>
@@ -1032,32 +1029,14 @@
         console.log('✅ Firebase & Google Provider initialized!');
 
         // ============================================================
-        // 2. تهيئة EmailJS
-        // ============================================================
-        const PUBLIC_KEY = "7RXGSj5jaLPLznhRM";
-        const SERVICE_ID = "service_kltwtgn";
-        const TEMPLATE_ID = "template_iq9pnen";
-        const STORE_EMAIL = "avirostore10@gmail.com";
-
-        emailjs.init({ publicKey: PUBLIC_KEY });
-        console.log('✅ EmailJS initialized');
-
-        // ============================================================
-        // 3. Formcarry Configuration
+        // 2. Formcarry Configuration
         // ============================================================
         const FORMCARRY_ENDPOINT = "https://formcarry.com/s/e8hWJ98Ixqz";
         const FORMCARRY_HEADERS = { "Accept": "application/json" };
         console.log('✅ Formcarry ready:', FORMCARRY_ENDPOINT);
 
         // ============================================================
-        // 4. تهيئة Forminit
-        // ============================================================
-        const forminit = new Forminit();
-        const FORM_ID = 'fcrwehkfyjg';
-        console.log('✅ Forminit initialized');
-
-        // ============================================================
-        // 5. بيانات المنتجات
+        // 3. بيانات المنتجات
         // ============================================================
         const allProducts = [{
             id: 1,
@@ -1116,7 +1095,7 @@
         }];
 
         // ============================================================
-        // 6. المتغيرات العامة
+        // 4. المتغيرات العامة
         // ============================================================
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let autoRotateIntervals = {};
@@ -1130,7 +1109,7 @@
         let pendingCheckout = false;
 
         // ============================================================
-        // 7. دوال المصادقة
+        // 5. دوال المصادقة
         // ============================================================
         function handleLogin() {
             const email = document.getElementById('loginEmail').value.trim();
@@ -1379,7 +1358,7 @@
         }
 
         // ============================================================
-        // 8. مراقبة حالة المصادقة — الدخول المباشر للزوار
+        // 6. مراقبة حالة المصادقة — الدخول المباشر للزوار
         // ============================================================
         auth.onAuthStateChanged((user) => {
             const userEmailDisplay = document.getElementById('userEmailDisplay');
@@ -1409,7 +1388,7 @@
         });
 
         // ============================================================
-        // 9. تبديل الشاشات
+        // 7. تبديل الشاشات
         // ============================================================
         function showLogin() {
             document.getElementById('registerScreen').classList.remove('show');
@@ -1443,7 +1422,7 @@
         }
 
         // ============================================================
-        // 10. مودال من نحن
+        // 8. مودال من نحن
         // ============================================================
         function showAboutModal(e) {
             if (e) e.preventDefault();
@@ -1455,53 +1434,7 @@
         }
 
         // ============================================================
-        // 11. دوال الموقع
-        // ============================================================
-        function getLocation() {
-            if (!navigator.geolocation) {
-                alert("⚠️ المتصفح لا يدعم خاصية تحديد الموقع!");
-                return;
-            }
-            const locationInput = document.getElementById('clientLocation');
-            locationInput.value = '⏳ جاري جلب الموقع...';
-
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
-                        .then(response => response.json())
-                        .then(data => {
-                            locationInput.value = data.display_name || `${lat}, ${lng}`;
-                            showNotification('✅ تم تحديد الموقع بنجاح!');
-                        })
-                        .catch(() => {
-                            locationInput.value = `${lat}, ${lng}`;
-                            showNotification('✅ تم تحديد الموقع');
-                        });
-                },
-                function(error) {
-                    let errorMessage = '⚠️ فشل في جلب الموقع';
-                    if (error.code === 1) errorMessage = '⚠️ المستخدم رفض مشاركة الموقع';
-                    else if (error.code === 2) errorMessage = '⚠️ الموقع غير متوفر حالياً';
-                    else if (error.code === 3) errorMessage = '⚠️ انتهت مهلة جلب الموقع';
-                    locationInput.value = '';
-                    alert(errorMessage + '\nيمكنك كتابة العنوان يدوياً.');
-                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
-        }
-
-        function openMapPicker() {
-            window.open('https://www.google.com/maps', '_blank');
-            showNotification('🗺️ اختر موقعك على الخريطة ثم انسخ العنوان');
-            const locationInput = document.getElementById('clientLocation');
-            locationInput.placeholder = 'الصق العنوان من الخريطة هنا...';
-            locationInput.value = '';
-            locationInput.focus();
-        }
-
-        // ============================================================
-        // 12. دوال مساعدة
+        // 9. دوال مساعدة
         // ============================================================
         function cleanName(name) {
             let cleaned = name.replace(/[^a-zA-Z\u0600-\u06FF\s\-'\.]/g, '');
@@ -1554,7 +1487,7 @@
         }
 
         // ============================================================
-        // 13. إتمام الشراء — التحقق من تسجيل الدخول
+        // 10. إتمام الشراء — التحقق من تسجيل الدخول
         // ============================================================
         function checkout() {
             if (cart.length === 0) {
@@ -1582,7 +1515,7 @@
         }
 
         // ============================================================
-        // 14. إرسال الطلب عبر Formcarry
+        // 11. إرسال الطلب عبر Formcarry
         // ============================================================
         async function submitOrderWithFormcarry(name, phone, email, address, productsList, total, totalItems) {
             try {
@@ -1630,57 +1563,14 @@
         }
 
         // ============================================================
-        // 15. إرسال بريد إلكتروني عبر EmailJS
+        // 12. sendOrder — إرسال الطلب
         // ============================================================
-        function sendOrderEmail(name, email, phone, location, total, productsList, totalItems) {
-            const message = `
-    🛍️ طلب جديد من متجر Aviro Store!
-
-    👤 اسم العميل: ${name}
-    📱 رقم الهاتف: ${phone}
-    📍 العنوان: ${location}
-    ✉️ البريد الإلكتروني: ${email}
-
-    📦 تفاصيل المنتجات:
-    ${productsList}
-
-    📊 ملخص الطلب:
-    • عدد القطع: ${totalItems} قطعة
-    • الإجمالي: ${total} ج.م
-
-    📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}
-    🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}
-
-    ---
-    📧 تم الإرسال تلقائياً من متجر Aviro Store
-    🌐 avirostore10@gmail.com
-    `;
-
-            return emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-                to_email: STORE_EMAIL,
-                from_name: name,
-                from_email: email,
-                message: message,
-                subject: "🛍️ طلب جديد من متجر Aviro Store",
-                phone: phone,
-                location: location,
-                total: total + " ج.م",
-                store_name: "Aviro Store",
-                year: new Date().getFullYear()
-            });
-        }
-
-        // ============================================================
-        // 16. sendOrder — الإرسال الرئيسي (Formcarry + Forminit + EmailJS)
-        // ============================================================
-        function sendOrder() {
-            let firstName = document.querySelector('input[name="fi-sender-firstName"]').value.trim();
-            let lastName = document.querySelector('input[name="fi-sender-lastName"]').value.trim();
-            const phone = document.querySelector('input[name="fi-sender-phone"]').value.trim();
-            const address = document.querySelector('input[name="fi-sender-address"]').value.trim();
-            const email = document.querySelector('input[name="fi-sender-email"]').value.trim();
-
-            const locationInput = document.getElementById('clientLocation')?.value.trim() || '';
+        async function sendOrder() {
+            let firstName = document.getElementById('checkoutFirstName').value.trim();
+            let lastName = document.getElementById('checkoutLastName').value.trim();
+            const phone = document.getElementById('checkoutPhone').value.trim();
+            const address = document.getElementById('checkoutAddress').value.trim();
+            const email = document.getElementById('checkoutEmail').value.trim();
 
             firstName = cleanName(firstName);
             lastName = cleanName(lastName);
@@ -1689,7 +1579,7 @@
             const finalLastName = lastName || '';
             const finalName = `${finalFirstName} ${finalLastName}`.trim() || 'غير مدخل';
             const finalPhone = formatPhoneNumber(phone || '');
-            const finalAddress = address || locationInput || 'غير مدخل';
+            const finalAddress = address || 'غير مدخل';
             const finalEmail = email || 'غير مدخل';
 
             if (!firstName || !lastName || !finalPhone || !finalAddress) {
@@ -1720,94 +1610,64 @@
 
             showNotification('📧 جاري إرسال الطلب...');
 
-            // 1️⃣ Formcarry (الرئيسي)
-            submitOrderWithFormcarry(finalName, finalPhone, finalEmail, finalAddress, productsList, total, totalItems)
-                .then((result) => {
-                    if (result.success) {
-                        console.log('✅ Formcarry: تم الإرسال بنجاح!');
-                        showNotification('✅ تم إرسال الطلب عبر Formcarry!', 'success');
-                    } else {
-                        console.warn('⚠️ Formcarry: فشل الإرسال، سيتم الاعتماد على الأنظمة الأخرى');
+            const statusEl = document.getElementById('contactStatus');
+            const submitBtn = document.getElementById('contactSubmitBtn');
+
+            if (statusEl) {
+                statusEl.textContent = '⏳ جاري الإرسال...';
+                statusEl.className = 'status-msg';
+            }
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ جاري الإرسال...';
+            }
+
+            // إرسال عبر Formcarry
+            const result = await submitOrderWithFormcarry(
+                finalName, finalPhone, finalEmail, finalAddress,
+                productsList, total, totalItems
+            );
+
+            if (result.success) {
+                showNotification('✅ تم إرسال الطلب بنجاح! سيتم التواصل معك قريباً.', 'success');
+                if (statusEl) {
+                    statusEl.textContent = '✅ تم إرسال طلبك بنجاح! سيتم التواصل معك قريباً.';
+                    statusEl.className = 'status-msg success';
+                }
+
+                // تفريغ السلة
+                cart = [];
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartIconCount();
+                renderCart();
+
+                // إغلاق المودال بعد ثانيتين
+                setTimeout(() => {
+                    closeCheckoutModal();
+                    document.querySelectorAll('#checkoutModal input, #checkoutModal textarea').forEach(el => {
+                        el.value = '';
+                    });
+                    if (statusEl) {
+                        statusEl.textContent = '';
+                        statusEl.className = 'status-msg';
                     }
-                });
+                }, 2500);
+            } else {
+                showNotification('❌ فشل إرسال الطلب، يرجى المحاولة مرة أخرى', 'error');
+                if (statusEl) {
+                    statusEl.textContent = '❌ فشل الإرسال: ' + (result.error || 'خطأ غير معروف');
+                    statusEl.className = 'status-msg error';
+                }
+            }
 
-            // 2️⃣ Forminit (احتياطي)
-            const orderData = {
-                blocks: [
-                    {
-                        type: 'sender',
-                        properties: {
-                            firstName: finalFirstName,
-                            lastName: finalLastName,
-                            email: finalEmail,
-                            phone: finalPhone
-                        }
-                    },
-                    {
-                        type: 'text',
-                        name: 'order_details',
-                        value: `🛍️ طلب جديد من متجر Aviro Store!
-
-👤 اسم العميل: ${finalName}
-📱 رقم الهاتف: ${finalPhone}
-📍 العنوان: ${finalAddress}
-✉️ البريد الإلكتروني: ${finalEmail}
-
-📦 تفاصيل الطلب:
-${productsList}
-
-📊 ملخص الطلب:
-• عدد القطع: ${totalItems} قطعة
-• الإجمالي: ${total} ج.م
-
-📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}
-🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}`
-                    },
-                    { type: 'text', name: 'customer_name', value: finalName },
-                    { type: 'text', name: 'customer_phone', value: finalPhone },
-                    { type: 'text', name: 'customer_address', value: finalAddress },
-                    { type: 'text', name: 'customer_email', value: finalEmail },
-                    { type: 'text', name: 'total_items', value: totalItems + ' قطعة' },
-                    { type: 'text', name: 'total_price', value: total + ' ج.م' },
-                    { type: 'text', name: 'products_list', value: productsList }
-                ]
-            };
-
-            forminit.submit(FORM_ID, orderData)
-                .then((result) => {
-                    if (result.error) {
-                        console.warn('⚠️ Forminit error:', result.error);
-                        return;
-                    }
-                    console.log('✅ Forminit: تم الإرسال بنجاح!');
-                })
-                .catch((error) => {
-                    console.warn('⚠️ Forminit catch:', error);
-                });
-
-            // 3️⃣ EmailJS
-            sendOrderEmail(finalName, finalEmail, finalPhone, finalAddress, total, productsList, totalItems)
-                .then(() => {
-                    showNotification('✅ تم إرسال الطلب بنجاح! سيتم التواصل معك قريباً.', 'success');
-                    cart = [];
-                    localStorage.setItem("cart", JSON.stringify(cart));
-                    updateCartIconCount();
-                    renderCart();
-                    setTimeout(() => {
-                        closeCheckoutModal();
-                        document.querySelectorAll('#checkoutModal input, #checkoutModal textarea').forEach(el => {
-                            el.value = '';
-                        });
-                    }, 2000);
-                })
-                .catch((error) => {
-                    console.error('❌ EmailJS error:', error);
-                    showNotification('⚠️ تم إرسال الطلب عبر النظام البديل');
-                });
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📧 تأكيد وإرسال الطلب';
+            }
         }
 
         // ============================================================
-        // 17. وظائف المنتجات
+        // 13. وظائف المنتجات
         // ============================================================
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('productsContainer');
@@ -1927,7 +1787,7 @@ ${productsList}
         }
 
         // ============================================================
-        // 18. صورة 360
+        // 14. صورة 360
         // ============================================================
         function startDrag(e, id) {
             isDragging = true;
@@ -2001,7 +1861,7 @@ ${productsList}
         }
 
         // ============================================================
-        // 19. السلة
+        // 15. السلة
         // ============================================================
         function toggleCart() {
             const sidebar = document.getElementById('cartSidebar');
@@ -2125,7 +1985,7 @@ ${productsList}
         }
 
         // ============================================================
-        // 20. تفاصيل المنتج
+        // 16. تفاصيل المنتج
         // ============================================================
         function openProductDetails(productId) {
             const product = allProducts.find(p => p.id === productId);
@@ -2266,36 +2126,18 @@ ${productsList}
         }
 
         // ============================================================
-        // 21. نموذج Forminit
+        // 17. نموذج الطلب — Formcarry
         // ============================================================
         const contactForm = document.getElementById('contactForm');
-        const contactStatus = document.getElementById('contactStatus');
-        const contactSubmitBtn = document.getElementById('contactSubmitBtn');
-
-        if (contactForm && contactStatus && contactSubmitBtn) {
+        if (contactForm) {
             contactForm.addEventListener('submit', async function(event) {
                 event.preventDefault();
-
-                contactStatus.textContent = '⏳ جاري الإرسال...';
-                contactStatus.className = 'status-msg';
-                contactSubmitBtn.disabled = true;
-                contactSubmitBtn.textContent = '⏳ جاري الإرسال...';
-
-                try {
-                    sendOrder();
-                } catch (e) {
-                    console.error(e);
-                }
-
-                setTimeout(() => {
-                    contactSubmitBtn.disabled = false;
-                    contactSubmitBtn.textContent = '📧 تأكيد وإرسال الطلب';
-                }, 1500);
+                await sendOrder();
             });
         }
 
         // ============================================================
-        // 22. ربط الأحداث
+        // 18. ربط الأحداث
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('scroll', () => {

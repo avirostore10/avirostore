@@ -134,14 +134,14 @@ html[dir="ltr"] .lang-toggle-btn { text-align:left; }
 .header-search button { height:44px; padding:0 24px; background:var(--ink); border:none; color:#fff; font-weight:bold; cursor:pointer; transition:.3s; font-size:17px; display:flex; align-items:center; justify-content:center; }
 .header-search button:hover { background: var(--logo-gray); }
 
+/* ===== التعديل المهم هنا ===== */
 .hero-slider { position: relative; width: 100%; max-width: 1400px; height: 480px; margin: 20px auto; overflow: hidden; background: var(--logo-gray); border-radius: var(--radius); }
 .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
-.slide { min-width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; }
+.slide { min-width: 100%; height: 100%; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; }
 .slide img { width: 100%; height: 100%; object-fit: cover; }
 .slider-dots { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
 .slider-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.5); cursor: pointer; transition: 0.3s; }
 .slider-dots .dot.active { background: var(--accent); transform: scale(1.2); }
-
 
 .shop-by-category { max-width: 1400px; margin: 40px auto; padding: 0 20px; text-align: center; }
 .shop-by-category h2 { font-size: 32px; font-weight: 900; color: var(--ink); margin-bottom: 30px; }
@@ -153,7 +153,6 @@ html[dir="ltr"] .lang-toggle-btn { text-align:left; }
 .category-item:hover .category-icon-box svg { stroke: var(--accent); }
 .category-item span { font-size: 16px; font-weight: 700; color: var(--ink); }
 .category-item:hover span { color: var(--accent); }
-
 
 .section-head { max-width:1400px; margin: 45px auto 6px; padding: 0 35px; display:flex; flex-direction: column; align-items: center; text-align: center; gap:10px; }
 .section-head .subtitle { color: var(--accent); font-size: 14px; font-weight: 700; }
@@ -545,16 +544,16 @@ footer .footer-bottom { border-top:1px solid #2a2a2a; padding-top:18px; text-ali
 
     <!-- ===== سلايدر الصور (Hero) ===== -->
     <div class="hero-slider">
-        <div class="slider-track" id="sliderTrack">
-            <div class="slide">
-                <img src="https://b.top4top.io/p_397587z0m1.jpg" alt="Slider 1">
-            </div>
-            <div class="slide">
-                <img src="https://d.top4top.io/p_3975i23441.jpg" alt="Slider 2">
-            </div>
-            <div class="slide">
-                <img src="https://f.top4top.io/p_3975suqef1.jpg" alt="Slider 3">
-            </div>
+       <div class="slider-track" id="sliderTrack">
+    <div class="slide">
+        <img src="https://d.top4top.io/p_3975i23441.jpg" alt="Slider 2" onerror="this.onerror=null; this.src='https://via.placeholder.com/1400x480/5a5a5a/ffffff?text=Slide+2';">
+    </div>
+    <div class="slide">
+        <img src="https://b.top4top.io/p_397587z0m1.jpg" alt="Slider 1" onerror="this.onerror=null; this.src='https://via.placeholder.com/1400x480/5a5a5a/ffffff?text=Slide+1';">
+    </div>
+    <div class="slide">
+        <img src="https://e.top4top.io/p_3975aja2e1.jpg" alt="Slider 3" onerror="this.onerror=null; this.src='https://via.placeholder.com/1400x480/5a5a5a/ffffff?text=Slide+3';">
+    </div>
         </div>
         <div class="slider-dots" id="sliderDots">
             <div class="dot active" onclick="goToSlide(0)"></div>
@@ -1331,7 +1330,8 @@ let currentSlide = 0;
 const totalSlides = 3;
 function updateSlider() {
     const track = document.getElementById('sliderTrack');
-    if(track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    if (!track) return;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
     document.querySelectorAll('.slider-dots .dot').forEach((dot, i) => {
         dot.classList.toggle('active', i === currentSlide);
     });
@@ -1344,6 +1344,15 @@ setInterval(() => {
     currentSlide = (currentSlide + 1) % totalSlides;
     updateSlider();
 }, 4000);
+
+// معالج فشل تحميل صور السلايدر
+document.querySelectorAll('#sliderTrack .slide img').forEach((img, i) => {
+    img.addEventListener('error', () => {
+        console.warn('Slider image failed to load:', img.src);
+        img.onerror = null;
+        img.src = 'https://via.placeholder.com/1400x480/5a5a5a/ffffff?text=Slide+' + (i + 1);
+    });
+});
 
 // ===== دوال مساعدة للصور والمنتجات =====
 function getProductImages(product) {
